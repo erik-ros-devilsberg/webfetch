@@ -14,6 +14,7 @@ use fivefilters\Readability\ParseException;
 use fivefilters\Readability\Readability;
 use GuzzleHttp\Psr7\Uri;
 use GuzzleHttp\Psr7\UriResolver;
+use League\HTMLToMarkdown\Converter\TableConverter;
 use League\HTMLToMarkdown\HtmlConverter;
 
 /**
@@ -98,7 +99,7 @@ final class Extractor
         if (!$useFallback) {
             return new ExtractSuccess(new PageContent(
                 title: $title,
-                byline: self::firstNonEmpty($readabilityAuthor, $meta['author'] ?? null),
+                byline: self::resolveByline($readabilityAuthor, $meta),
                 lang: $lang,
                 publishedAt: $publishedAt,
                 excerpt: $excerpt,
@@ -121,7 +122,7 @@ final class Extractor
 
         return new ExtractSuccess(new PageContent(
             title: $title,
-            byline: self::firstNonEmpty($meta['author'] ?? null),
+            byline: null,
             lang: $lang,
             publishedAt: $publishedAt,
             excerpt: $excerpt,
@@ -162,17 +163,66 @@ final class Extractor
 
     private static function toMarkdown(string $html): string
     {
+        $html = self::flattenCodeMarkup($html);
+
         try {
             $converter = new HtmlConverter([
                 'strip_tags' => true,
                 'header_style' => 'atx',
             ]);
+            $converter->getEnvironment()->addConverter(new TableConverter());
 
             return trim($converter->convert($html));
         } catch (\Throwable) {
             // Converter choked on pathological markup — plain text beats nothing.
             return self::squish(strip_tags($html));
         }
+    }
+
+    /**
+     * Server-side syntax highlighting wraps code in <span> markup; markdown
+     * code blocks must carry plain text. Reduce every <pre>/<code> element
+     * to its text content (entities already decoded by the parser) before
+     * conversion.
+     */
+    private static function flattenCodeMarkup(string $html): string
+    {
+        try {
+            $document = \Dom\HTMLDocument::createFromString($html, LIBXML_NOERROR, 'UTF-8');
+        } catch (\Throwable) {
+            return $html;
+        }
+
+        foreach ($document->querySelectorAll('pre, code') as $element) {
+            $text = $element->textContent ?? '';
+            $element->textContent = $text;
+        }
+
+        return $document->saveHtml();
+    }
+
+    /**
+     * readability.php reads bare meta[name=author], which on registry and
+     * platform pages is site chrome ("who built this website"), not the
+     * page's author. Trust its byline only when it isn't just echoing that
+     * tag on a non-article page.
+     *
+     * @param array<string, string> $meta
+     */
+    private static function resolveByline(?string $author, array $meta): ?string
+    {
+        $byline = self::firstNonEmpty($author);
+        if ($byline === null) {
+            return null;
+        }
+
+        $ogType = strtolower($meta['og:type'] ?? '');
+        $metaAuthor = trim($meta['author'] ?? '');
+        if ($ogType !== 'article' && $metaAuthor !== '' && strcasecmp($byline, $metaAuthor) === 0) {
+            return null;
+        }
+
+        return $byline;
     }
 
     /**

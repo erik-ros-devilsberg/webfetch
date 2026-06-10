@@ -13,7 +13,7 @@ Machine-readable schema: [`schema/webfetch-success.schema.json`](../schema/webfe
 | `url` | string | Final URL after redirects. |
 | `fetched_at` | string (RFC 3339) | When the page was fetched. |
 | `title` | string \| null | Page title (readability → og:title → `<title>`). |
-| `byline` | string \| null | Author (readability → `meta[name=author]`). |
+| `byline` | string \| null | Author via readability's detection, suppressed when it merely echoes site-wide `meta[name=author]` on a non-article page. Null when unknown — honest nulls over site chrome. |
 | `lang` | string \| null | `<html lang>` attribute. |
 | `published_at` | string \| null | `article:published_time` meta, verbatim. |
 | `excerpt` | string \| null | og:description → meta description. Deterministic — never synthesized from content. |

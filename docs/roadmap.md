@@ -80,6 +80,10 @@ framework-free.
   below 80% usable or on any regression vs the committed baseline.
   Implemented: `tests/Corpus/CorpusGateTest.php` over `tests/corpus/`
   (redistributable pages only — see `tests/corpus/ATTRIBUTION.md`).
+  Baseline expectations are calibrated against a reader-mode reference
+  (Firefox Reader Mode; Anthropic WebFetch as a second opinion), never
+  against our own current output — a baseline that pins a bug is worse
+  than no baseline.
 - **Coverage: report, don't gate** — coverage badge on the README; no
   threshold, TDD is enforced by process instead.
 - **No live network in the test suite** — all fetches mocked or fixtures.

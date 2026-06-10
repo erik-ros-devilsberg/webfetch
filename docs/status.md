@@ -17,3 +17,4 @@ Maintained by the agile plugin. One row per sprint — updated by `/agile:shape`
 | Hardening — Corpus Quality Gate | hardening-corpus-gate | done | Committed redistributable corpus scored against the spike rubric in CI. |
 | v1.0.0 Release Prep | v1-release-prep | done | CHANGELOG, README completion, clean-clone proof, manual publish checklist. |
 | Examples Directory | examples-directory | done | Four runnable, lint-gated example scripts plus README link. |
+| Extraction Quality Fixes | extraction-quality-fixes | done | Clean code blocks, markdown tables, honest bylines — pinned by corpus. |

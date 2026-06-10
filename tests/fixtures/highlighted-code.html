@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>vector-tools/query-builder - Package Registry</title>
+    <meta name="description" content="Fluent query building for vector similarity search.">
+    <meta name="author" content="Registry Operator">
+</head>
+<body>
+<main>
+    <h1>vector-tools/query-builder</h1>
+    <p>Fluent query building for vector similarity search. This package wraps the
+       native distance functions in a chainable builder so application code reads
+       like intent instead of SQL string assembly. Maintained by Erika Voss, who
+       reviews every contribution before it lands on the default branch.</p>
+
+    <h2>Quick start</h2>
+    <pre><code><span class="hljs-title">Schema</span>::<span class="hljs-function">create</span>(<span class="hljs-string">'articles'</span>, <span class="hljs-keyword">function</span> (<span class="hljs-type">Blueprint</span> <span class="hljs-variable">$table</span>) {
+    <span class="hljs-variable">$table</span>-><span class="hljs-function">vector</span>(<span class="hljs-string">'embedding'</span>, <span class="hljs-number">768</span>);
+});</code></pre>
+
+    <p>Results stream back as a lazy <code><span class="hljs-type">Generator</span>&lt;<span class="hljs-type">int</span>&gt;</code> so
+       large result sets never have to fit in memory at once. The builder validates
+       dimensions at call time and refuses silently truncated vectors, which is the
+       failure mode that otherwise costs an afternoon of debugging.</p>
+
+    <h2>Configuration</h2>
+    <table>
+        <thead>
+            <tr><th>Key</th><th>Default</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>default_dimensions</td><td>768</td><td>Vector column width</td></tr>
+            <tr><td>distance_metric</td><td>COSINE</td><td>COSINE or EUCLIDEAN</td></tr>
+        </tbody>
+    </table>
+
+    <p>Both keys live in one published config file. Override per query when a single
+       model in the application embeds at a different width than the default, which
+       happens more often than schema designers like to admit.</p>
+</main>
+</body>
+</html>

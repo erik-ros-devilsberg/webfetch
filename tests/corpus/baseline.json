@@ -89,6 +89,15 @@
         "contains": "HyperText Markup Language",
         "title_contains": "HTML"
     },
+    "highlighted-code": {
+        "file": "fixtures/highlighted-code.html",
+        "url": "https://example.com/registry-page",
+        "rating": "usable",
+        "strategy": "readability",
+        "min_words": 100,
+        "contains": "Schema::create('articles', function (Blueprint $table) {",
+        "title_contains": "vector-tools/query-builder"
+    },
     "wikipedia-json": {
         "file": "corpus/wikipedia-json.html",
         "url": "https://en.wikipedia.org/wiki/JSON",

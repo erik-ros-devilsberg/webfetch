@@ -88,8 +88,22 @@ and quality gates.
   yields nothing → `empty_extraction` failure (the JS-shell case).
 - `excerpt` is deterministic: og:description → meta description → null.
   Never synthesized from content (readability's auto-excerpt is ignored).
-- Markdown via league/html-to-markdown (strip_tags, atx headers); converter
-  exceptions degrade to plain text, never propagate.
+- `byline` (since Extraction Quality Fixes sprint): readability's detection
+  only, suppressed when it merely echoes site-wide `meta[name=author]` on a
+  non-article page (readability.php itself reads that tag — verified in its
+  namePattern). Null over site chrome; the consuming agent can read the
+  maintainer from content_markdown.
+- Markdown via league/html-to-markdown (strip_tags, atx headers, table
+  converter enabled); converter exceptions degrade to plain text, never
+  propagate. Before conversion, `<pre>`/`<code>` elements are flattened to
+  text content so server-side syntax highlighting (`<span>` soup on
+  Packagist/GitHub-rendered pages) never reaches the markdown. Note: the
+  converter escapes literal underscores in table cells — correct markdown,
+  remember it when writing test expectations.
+- Quality reference for baselines: reader-mode rendering (Firefox Reader
+  Mode; Anthropic WebFetch as second opinion) — never our own current
+  output. The fixture `highlighted-code.html` pins all three defects found
+  in the 2026-06-10 live comparison.
 - `JsonSerializer` (`src/Serializer/`): `success(PageContent, url,
   DateTimeImmutable)` → JSON string. Clock is a parameter — tests inject a
   fixed instant. Discriminator field `ok`; `schema_version` 1.

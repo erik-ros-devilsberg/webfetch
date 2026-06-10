@@ -123,6 +123,45 @@ final class ExtractorTest extends TestCase
         self::assertContains('https://news.example.com/2026/06/php-85-preview', $hrefs);
     }
 
+    public function testHighlightedCodeBlocksAreCleaned(): void
+    {
+        $outcome = new Extractor()->extract(self::fetchFixture('highlighted-code.html'));
+
+        self::assertInstanceOf(ExtractSuccess::class, $outcome);
+        $markdown = $outcome->content->contentMarkdown;
+        self::assertStringContainsString("Schema::create('articles', function (Blueprint \$table) {", $markdown);
+        self::assertStringNotContainsString('<span', $markdown);
+        self::assertStringNotContainsString('hljs', $markdown);
+    }
+
+    public function testEntitiesInCodeDecodeToPlainText(): void
+    {
+        $outcome = new Extractor()->extract(self::fetchFixture('highlighted-code.html'));
+
+        self::assertInstanceOf(ExtractSuccess::class, $outcome);
+        self::assertStringContainsString('Generator<int>', $outcome->content->contentMarkdown);
+    }
+
+    public function testTablesConvertToMarkdownTables(): void
+    {
+        $outcome = new Extractor()->extract(self::fetchFixture('highlighted-code.html'));
+
+        self::assertInstanceOf(ExtractSuccess::class, $outcome);
+        $markdown = $outcome->content->contentMarkdown;
+        self::assertStringContainsString('| Key | Default | Description |', $markdown);
+        // The converter escapes literal underscores — correct markdown.
+        self::assertStringContainsString('| default\_dimensions | 768 | Vector column width |', $markdown);
+    }
+
+    public function testSiteWideMetaAuthorIsNotAByline(): void
+    {
+        $outcome = new Extractor()->extract(self::fetchFixture('highlighted-code.html'));
+
+        self::assertInstanceOf(ExtractSuccess::class, $outcome);
+        // meta[name=author] says "Registry Operator" — site chrome, not a byline.
+        self::assertNull($outcome->content->byline);
+    }
+
     public function testEmptyShellFailsWithEmptyExtraction(): void
     {
         $outcome = new Extractor()->extract(self::fetchFixture('empty-shell.html'));
