@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>The Art of Static Fetching — Example Journal</title>
+    <meta name="description" content="Why plain HTTP still wins for most pages an agent will ever read.">
+    <meta name="author" content="Jane Doe">
+    <meta property="og:site_name" content="Example Journal">
+    <meta property="og:title" content="The Art of Static Fetching">
+    <meta property="og:description" content="Why plain HTTP still wins for most pages an agent will ever read.">
+    <meta property="og:image" content="https://example.com/img/static-fetching.png">
+    <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2026-01-15T09:00:00+00:00">
+</head>
+<body>
+<nav><a href="/">Home</a> <a href="/archive">Archive</a> <a href="/about">About</a></nav>
+<article>
+    <h1>The Art of Static Fetching</h1>
+    <p class="byline">By Jane Doe</p>
+    <p>Most of the web an agent actually needs — documentation, articles, encyclopedias,
+       changelogs — is still served as plain server-rendered HTML. Reaching for a headless
+       browser by default wastes seconds of latency and hundreds of megabytes of memory on
+       pages that would have been perfectly readable with a single HTTP request. The
+       pragmatic order of operations is fetch first, render only when fetching demonstrably
+       failed to produce content worth reading.</p>
+    <h2>Why latency matters more than completeness</h2>
+    <p>An agent loop that takes eight seconds per page read becomes unusable long before it
+       becomes incorrect. Static fetching keeps the common case under half a second, which
+       means a research loop can afford to read ten sources instead of two. The rare single
+       page application can be detected cheaply — the extracted text is a tiny fraction of
+       the markup — and only that page pays the headless penalty.</p>
+    <h2>A small example</h2>
+    <p>The whole strategy fits in one conditional, as the following snippet shows. It is
+       <em>deliberately</em> boring code, and that is <strong>exactly the point</strong> of it.</p>
+    <pre><code>$result = $static->fetch($url);
+if ($result->looksEmpty()) {
+    $result = $chrome->fetch($url);
+}</code></pre>
+    <h2>What to keep</h2>
+    <ul>
+        <li>Fetch statically first, always</li>
+        <li>Measure extracted-text ratio to detect shells</li>
+        <li>Escalate to a real browser only on demonstrated need</li>
+    </ul>
+    <p>For a longer treatment of content extraction itself, see
+       <a href="https://example.com/extraction-deep-dive">the extraction deep dive</a>, which
+       covers scoring heuristics in detail and benchmarks the popular implementations against
+       a shared corpus of real pages collected over several years of production crawling.</p>
+</article>
+<footer><p>© 2026 Example Journal</p></footer>
+<script>analyticsBeacon("article-42");</script>
+</body>
+</html>

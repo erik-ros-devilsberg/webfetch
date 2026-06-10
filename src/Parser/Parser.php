@@ -28,7 +28,7 @@ final class Parser
             return new ParseFailure(ParseError::ParseFailed, $e->getMessage());
         }
 
-        return new ParseSuccess($document);
+        return new ParseSuccess($document, $body);
     }
 
     private static function toUtf8(string $body, string $charset): string

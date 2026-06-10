@@ -1,0 +1,61 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/devilsberg/webfetch/main/schema/webfetch-success.schema.json",
+    "title": "webfetch success result",
+    "description": "The JSON shape devilsberg/webfetch produces for a successfully fetched and extracted page. This schema is the public contract: changes are breaking changes.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "ok",
+        "schema_version",
+        "url",
+        "fetched_at",
+        "title",
+        "byline",
+        "lang",
+        "published_at",
+        "excerpt",
+        "content_markdown",
+        "word_count",
+        "links",
+        "meta",
+        "extraction_strategy"
+    ],
+    "properties": {
+        "ok": { "const": true },
+        "schema_version": { "const": 1 },
+        "url": { "type": "string" },
+        "fetched_at": { "type": "string", "format": "date-time" },
+        "title": { "type": ["string", "null"] },
+        "byline": { "type": ["string", "null"] },
+        "lang": { "type": ["string", "null"] },
+        "published_at": { "type": ["string", "null"] },
+        "excerpt": { "type": ["string", "null"] },
+        "content_markdown": { "type": "string" },
+        "word_count": { "type": "integer", "minimum": 0 },
+        "links": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["text", "href"],
+                "properties": {
+                    "text": { "type": "string" },
+                    "href": { "type": "string" }
+                }
+            }
+        },
+        "meta": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["site_name", "description", "image", "type"],
+            "properties": {
+                "site_name": { "type": ["string", "null"] },
+                "description": { "type": ["string", "null"] },
+                "image": { "type": ["string", "null"] },
+                "type": { "type": ["string", "null"] }
+            }
+        },
+        "extraction_strategy": { "enum": ["readability", "fallback"] }
+    }
+}

@@ -77,6 +77,26 @@ and quality gates.
   it too); pages like that will extract garbage and that is correct
   behavior.
 
+## Extraction and JSON output (since Readable Content Extraction sprint)
+
+- `Extractor` (`src/Extractor/`): `extract(FetchSuccess): ExtractOutcome`.
+  Primary path: fivefilters/readability.php (charThreshold 100,
+  fixRelativeURLs against the final URL). Fallback triggers when content is
+  null, <30 words, or <10% of body words — it builds title + meta
+  description + headline links (anchor text ≥15 chars, resolved absolute,
+  deduped, max 100). Both paths share og/meta harvesting. If fallback also
+  yields nothing → `empty_extraction` failure (the JS-shell case).
+- `excerpt` is deterministic: og:description → meta description → null.
+  Never synthesized from content (readability's auto-excerpt is ignored).
+- Markdown via league/html-to-markdown (strip_tags, atx headers); converter
+  exceptions degrade to plain text, never propagate.
+- `JsonSerializer` (`src/Serializer/`): `success(PageContent, url,
+  DateTimeImmutable)` → JSON string. Clock is a parameter — tests inject a
+  fixed instant. Discriminator field `ok`; `schema_version` 1.
+- Public contract: `schema/webfetch-success.schema.json` (draft-07),
+  human docs in `docs/json-schema.md`. Tests validate every success output
+  via opis/json-schema (dev dep). Schema changes are breaking.
+
 ## Repository layout
 
 - `src/` — `Webfetch` class is a placeholder (VERSION constant only);

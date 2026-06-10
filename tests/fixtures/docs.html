@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>fetch() — Toolkit Reference</title>
+</head>
+<body>
+<aside><ul><li><a href="/docs/install">Install</a></li><li><a href="/docs/fetch">fetch()</a></li><li><a href="/docs/parse">parse()</a></li></ul></aside>
+<main>
+    <h1>fetch()</h1>
+    <p>Fetches a URL and returns an outcome object. The outcome is a success carrying the
+       response body and metadata, or a typed failure explaining what went wrong. The
+       function never throws for network-level problems, which makes it safe to call in a
+       loop over untrusted URLs gathered from arbitrary pages without wrapping every call
+       in defensive exception handling.</p>
+    <h2>Signature</h2>
+    <pre><code>function fetch(string $url, ?Options $options = null): Outcome</code></pre>
+    <h2>Behaviour</h2>
+    <p>Redirects are followed up to the configured limit. Responses larger than the size
+       cap are aborted mid-stream rather than buffered, so a misbehaving server cannot
+       exhaust memory. Character sets are detected from headers first and the document
+       itself second, defaulting to UTF-8 when neither source declares one.</p>
+    <h2>Options</h2>
+    <ul>
+        <li><code>connectTimeout</code> — seconds to wait for the connection</li>
+        <li><code>totalTimeout</code> — seconds for the whole transfer</li>
+        <li><code>maxBytes</code> — hard cap on response size</li>
+    </ul>
+</main>
+</body>
+</html>
