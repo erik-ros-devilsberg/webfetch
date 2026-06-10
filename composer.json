@@ -6,6 +6,8 @@
     "keywords": ["webfetch", "readability", "html-to-json", "content-extraction", "ai-agent"],
     "require": {
         "php": "^8.4",
+        "ext-dom": "*",
+        "ext-mbstring": "*",
         "guzzlehttp/guzzle": "^7.9"
     },
     "require-dev": {

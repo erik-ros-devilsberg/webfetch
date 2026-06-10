@@ -62,6 +62,21 @@ and quality gates.
   meta scan (first 4KB) → utf-8, non-HTML content types rejected as
   `not_html`. Tests use MockHandler only.
 
+## Parsing (since HTML Parsing sprint)
+
+- `Parser` (`src/Parser/`): `parse(FetchSuccess): ParseOutcome` —
+  `ParseSuccess` carries a `\Dom\HTMLDocument`; `ParseFailure` carries
+  `ParseError` (`empty_body`, `parse_failure`). Same instanceof pattern as
+  fetching.
+- Body is normalized to UTF-8 before parsing (mb_convert_encoding from the
+  fetch-detected charset; unknown labels fall back to treating input as
+  UTF-8). `createFromString(..., LIBXML_NOERROR, 'UTF-8')` so a stale meta
+  charset can't mislead the parser post-conversion.
+- Gotcha learned in tests: `<title>` is RCDATA — an *unclosed* `<title>`
+  swallows the rest of the document as text. Spec-compliant (browsers do
+  it too); pages like that will extract garbage and that is correct
+  behavior.
+
 ## Repository layout
 
 - `src/` — `Webfetch` class is a placeholder (VERSION constant only);
