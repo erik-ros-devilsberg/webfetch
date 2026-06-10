@@ -3,9 +3,8 @@
 Turn a webpage into readable-content JSON. Built for AI agents, usable
 anywhere.
 
-> **Status: pre-release.** The API is under construction — see
-> `docs/roadmap.md` for where this is going. Nothing below is published to
-> Packagist yet.
+> **Status: release-ready, pending first publish to Packagist.** See
+> `CHANGELOG.md` and `docs/RELEASING.md`.
 
 ## What it does
 
@@ -27,8 +26,21 @@ behind the same interface is on the roadmap.
 ## Install
 
 ```sh
-composer require devilsberg/webfetch   # not yet published — coming with v1.0.0
+composer require devilsberg/webfetch   # available once v1.0.0 is on Packagist
 ```
+
+## Why this and not …?
+
+- **readability.php alone** — gives you a DOM and HTML content; webfetch
+  adds the fetch layer (timeouts, size caps, SSRF guard), markdown
+  conversion, metadata, links, and a stable JSON contract with error codes.
+  We reuse readability.php internally rather than compete with it.
+- **A headless-browser stack for everything** — seconds of latency and
+  hundreds of MB per page that plain HTTP would have served in 200ms.
+  webfetch is static-first, browser-only-on-demand.
+- **Rolling your own with Guzzle + strip_tags** — works until the first
+  cookie banner, charset surprise, redirect loop, or 169.254.169.254.
+  That plumbing is exactly what this package is.
 
 ## Usage
 

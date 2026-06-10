@@ -190,6 +190,20 @@ and quality gates.
   readability (spike) to fallback (charThreshold 100 config) — baseline
   records reality, rating degraded.
 
+## Release state (since v1.0.0 Release Prep sprint)
+
+- `Webfetch::VERSION` is `1.0.0`; CHANGELOG.md (Keep a Changelog) carries
+  the v1.0.0 section and the semver policy: **JSON schema changes are
+  major-version bumps**, regardless of PHP signatures.
+- Clean-clone verified: fresh `git clone` + `composer install` +
+  `composer check` is green (87 tests; the Chrome integration test skips
+  outside $HOME because snap Chromium cannot read /tmp — skip logic
+  distinguishes Chrome error pages from genuine render failures).
+- **Publishing is manual and pending**: `docs/RELEASING.md` is the
+  checklist (directory rename + phagent path update, GitHub repo + push,
+  v1.0.0 tag, Packagist + webhook, flip phagent to `^1.0`). Story 11 stays
+  in the backlog until those steps are run with Erik's accounts.
+
 ## Repository layout
 
 - `src/` — `Webfetch` class is a placeholder (VERSION constant only);

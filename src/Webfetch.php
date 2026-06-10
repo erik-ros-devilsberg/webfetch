@@ -21,7 +21,7 @@ use Devilsberg\Webfetch\Serializer\JsonSerializer;
  */
 final class Webfetch
 {
-    public const string VERSION = '0.1.0-dev';
+    public const string VERSION = '1.0.0';
 
     private function __construct(
         private readonly Fetcher $fetcher,
