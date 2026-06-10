@@ -94,6 +94,11 @@ never throws.
 | `composer analyse` | Run PHPStan static analysis at level 8.                       |
 | `composer check`   | Run `lint` + `analyse` + `test` as a single pre-commit gate.  |
 
+The test suite includes an extraction-quality gate: a committed corpus of
+real (freely-licensed) pages must stay ≥80% "usable" against
+`tests/corpus/baseline.json`, and no page may regress. If your change
+breaks it, extraction quality went down — fix the change, not the baseline.
+
 ## License
 
 [MIT](LICENSE)

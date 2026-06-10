@@ -78,6 +78,8 @@ framework-free.
 - **Scored extraction corpus** (from Phase 5) — real-world fixture pages
   rated usable / degraded / failed with the Phase 0 rubric; gate fails
   below 80% usable or on any regression vs the committed baseline.
+  Implemented: `tests/Corpus/CorpusGateTest.php` over `tests/corpus/`
+  (redistributable pages only — see `tests/corpus/ATTRIBUTION.md`).
 - **Coverage: report, don't gate** — coverage badge on the README; no
   threshold, TDD is enforced by process instead.
 - **No live network in the test suite** — all fetches mocked or fixtures.

@@ -173,6 +173,23 @@ and quality gates.
   browser-like traffic, not crawling; browsers don't consult robots.txt.
   Crawling-shaped consumers wrap explicitly.
 
+## Extraction quality gate (since Hardening — Corpus Quality Gate sprint)
+
+- `tests/Corpus/CorpusGateTest.php` runs 11 committed pages (7 real,
+  redistributable-only — licenses in `tests/corpus/ATTRIBUTION.md` — plus
+  4 synthetic fixtures) through Extractor + JsonSerializer on every
+  `composer check`.
+- `tests/corpus/baseline.json` is the machine form of the spike rubric:
+  per page expected strategy, min word count, content fingerprint, title
+  fragment. Any miss = named regression; baseline usable-share must stay
+  ≥80% (currently 9/11 = 81.8%; honest degraded: wikipedia-nl truncation,
+  php-manual fallback).
+- Corpus pages are snapshots — refreshing them is a manual, attributed
+  act, never silent.
+- Noted during this sprint: php-manual extraction shifted from
+  readability (spike) to fallback (charThreshold 100 config) — baseline
+  records reality, rating degraded.
+
 ## Repository layout
 
 - `src/` — `Webfetch` class is a placeholder (VERSION constant only);

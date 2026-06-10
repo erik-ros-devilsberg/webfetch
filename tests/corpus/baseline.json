@@ -1,0 +1,101 @@
+{
+    "article": {
+        "file": "fixtures/article.html",
+        "url": "https://example.com/article",
+        "rating": "usable",
+        "strategy": "readability",
+        "min_words": 180,
+        "contains": "Fetch statically first",
+        "title_contains": "Static Fetching"
+    },
+    "docs": {
+        "file": "fixtures/docs.html",
+        "url": "https://example.com/docs",
+        "rating": "usable",
+        "strategy": "readability",
+        "min_words": 100,
+        "contains": "Redirects are followed",
+        "title_contains": "fetch()"
+    },
+    "minimal": {
+        "file": "fixtures/minimal.html",
+        "url": "https://example.com/minimal",
+        "rating": "usable",
+        "strategy": "readability",
+        "min_words": 50,
+        "contains": "one honest paragraph",
+        "title_contains": null
+    },
+    "listing-trap": {
+        "file": "fixtures/listing-trap.html",
+        "url": "https://example.com/listing",
+        "rating": "usable",
+        "strategy": "fallback",
+        "min_words": 90,
+        "contains": "PHP 8.5 preview",
+        "title_contains": "Example Tech News"
+    },
+    "wikipedia-web-scraping": {
+        "file": "corpus/wikipedia-web-scraping.html",
+        "url": "https://en.wikipedia.org/wiki/Web_scraping",
+        "rating": "usable",
+        "strategy": "readability",
+        "min_words": 3000,
+        "contains": "scraping",
+        "title_contains": "Web scraping"
+    },
+    "wikipedia-nl-php": {
+        "file": "corpus/wikipedia-nl-php.html",
+        "url": "https://nl.wikipedia.org/wiki/PHP",
+        "rating": "degraded",
+        "strategy": "readability",
+        "min_words": 800,
+        "contains": "Lerdorf",
+        "title_contains": "PHP"
+    },
+    "whatwg-intro": {
+        "file": "corpus/whatwg-intro.html",
+        "url": "https://html.spec.whatwg.org/multipage/introduction.html",
+        "rating": "usable",
+        "strategy": "readability",
+        "min_words": 6000,
+        "contains": "HTML",
+        "title_contains": "HTML"
+    },
+    "php-manual-htmldocument": {
+        "file": "corpus/php-manual-htmldocument.html",
+        "url": "https://www.php.net/manual/en/class.dom-htmldocument.php",
+        "rating": "degraded",
+        "strategy": "fallback",
+        "min_words": 200,
+        "contains": "HTMLDocument",
+        "title_contains": "Dom\\HTMLDocument"
+    },
+    "keepachangelog": {
+        "file": "corpus/keepachangelog.html",
+        "url": "https://keepachangelog.com/en/1.1.0/",
+        "rating": "usable",
+        "strategy": "readability",
+        "min_words": 800,
+        "contains": "changelog",
+        "title_contains": "Keep a Changelog"
+    },
+    "wikipedia-html": {
+        "file": "corpus/wikipedia-html.html",
+        "url": "https://en.wikipedia.org/wiki/HTML",
+        "rating": "usable",
+        "strategy": "readability",
+        "min_words": 7000,
+        "contains": "HyperText Markup Language",
+        "title_contains": "HTML"
+    },
+    "wikipedia-json": {
+        "file": "corpus/wikipedia-json.html",
+        "url": "https://en.wikipedia.org/wiki/JSON",
+        "rating": "usable",
+        "strategy": "readability",
+        "min_words": 3500,
+        "contains": "JavaScript Object Notation",
+        "title_contains": "JSON"
+    }
+}

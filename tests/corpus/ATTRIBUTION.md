@@ -1,0 +1,19 @@
+# Corpus attribution
+
+These HTML snapshots are committed as extraction-quality test fixtures.
+Only freely-licensed, redistributable content is included; snapshots are
+never refreshed silently (the gate measures code regressions, not web
+drift). All fetched 2026-06-10.
+
+| File | Source | License |
+|------|--------|---------|
+| wikipedia-web-scraping.html | <https://en.wikipedia.org/wiki/Web_scraping> | CC BY-SA 4.0 (Wikipedia contributors) |
+| wikipedia-nl-php.html | <https://nl.wikipedia.org/wiki/PHP> | CC BY-SA 4.0 (Wikipedia contributors) |
+| wikipedia-html.html | <https://en.wikipedia.org/wiki/HTML> | CC BY-SA 4.0 (Wikipedia contributors) |
+| wikipedia-json.html | <https://en.wikipedia.org/wiki/JSON> | CC BY-SA 4.0 (Wikipedia contributors) |
+| whatwg-intro.html | <https://html.spec.whatwg.org/multipage/introduction.html> | CC BY 4.0 (WHATWG) |
+| php-manual-htmldocument.html | <https://www.php.net/manual/en/class.dom-htmldocument.php> | CC BY 3.0 (the PHP Documentation Group) |
+| keepachangelog.html | <https://keepachangelog.com/en/1.1.0/> | MIT (per the keep-a-changelog project repository) |
+
+The synthetic pages under `tests/fixtures/` are original to this project
+(MIT, like everything else here).
