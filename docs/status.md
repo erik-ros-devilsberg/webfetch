@@ -11,3 +11,4 @@ Maintained by the agile plugin. One row per sprint — updated by `/agile:shape`
 | Readable Content Extraction | readable-content-extraction | done | Core feature: readability + fallback extraction to schema-validated JSON. |
 | Error JSON Contract | error-json-contract | done | Error schema, ErrorCode enum, and the never-throwing Webfetch facade. |
 | CLI Entry Point | cli-entry-point | done | bin/webfetch: URL in, contract JSON on stdout, meaningful exit codes. |
+| Phagent WebFetchTool | phagent-webfetch-tool | done | web_fetch tool in phagent wrapping devilsberg/webfetch via path repo. |

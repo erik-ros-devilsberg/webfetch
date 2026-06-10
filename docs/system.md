@@ -124,6 +124,18 @@ and quality gates.
   is a shim. Declared in composer.json `bin`. No console-framework
   dependency — parsing this small doesn't justify one.
 
+## phagent integration (since Phagent WebFetchTool sprint)
+
+- `Phagent\Tool\WebFetchTool` lives in the **phagent repo** (commit
+  2b655f0), wrapping this library via a composer path repository pointing
+  at `../php-browse`. When this directory is renamed or the package hits
+  Packagist (story 11), update phagent's `repositories.webfetch` entry.
+- The dependency direction rule held: webfetch has zero knowledge of
+  phagent.
+- During integration phagent's remote was 5 commits ahead (OpenAI
+  provider, PSR-18 client, v0.0.1); the tool commit was rebased on top,
+  lock regenerated, full suite green (40 tests).
+
 ## Repository layout
 
 - `src/` — `Webfetch` class is a placeholder (VERSION constant only);
