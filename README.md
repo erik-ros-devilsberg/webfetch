@@ -30,14 +30,18 @@ behind the same interface is on the roadmap.
 composer require devilsberg/webfetch   # not yet published — coming with v1.0.0
 ```
 
-## Usage (target API — under construction)
+## Usage
 
 ```php
 use Devilsberg\Webfetch\Webfetch;
 
 $json = Webfetch::create()->fetch('https://example.com/article');
-// → JSON string: {"ok": true, "title": ..., "content_markdown": ..., ...}
+// → {"ok": true, "title": ..., "content_markdown": ..., ...}
+// or {"ok": false, "error_code": "timeout", ...} — it never throws.
 ```
+
+Output shapes are a versioned, schema-validated contract — see
+[docs/json-schema.md](docs/json-schema.md) and [schema/](schema/).
 
 ## Development
 

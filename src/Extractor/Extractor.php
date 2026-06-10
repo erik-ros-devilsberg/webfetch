@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Devilsberg\Webfetch\Extractor;
 
 use Devilsberg\Webfetch\Fetcher\FetchSuccess;
+use Devilsberg\Webfetch\Parser\ParseError;
+use Devilsberg\Webfetch\Parser\ParseFailure;
 use Devilsberg\Webfetch\Parser\Parser;
 use Devilsberg\Webfetch\Parser\ParseSuccess;
 use fivefilters\Readability\Configuration;
@@ -41,8 +43,17 @@ final class Extractor
     public function extract(FetchSuccess $fetch): ExtractOutcome
     {
         $parsed = $this->parser->parse($fetch);
+        if ($parsed instanceof ParseFailure) {
+            return new ExtractFailure(
+                match ($parsed->error) {
+                    ParseError::EmptyBody => ExtractError::EmptyBody,
+                    ParseError::ParseFailed => ExtractError::ParseFailed,
+                },
+                $parsed->message,
+            );
+        }
         if (!$parsed instanceof ParseSuccess) {
-            return new ExtractFailure(ExtractError::EmptyExtraction, 'Page could not be parsed');
+            return new ExtractFailure(ExtractError::ParseFailed, 'Unknown parse outcome');
         }
 
         $document = $parsed->document;

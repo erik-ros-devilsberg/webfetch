@@ -1,0 +1,38 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://raw.githubusercontent.com/devilsberg/webfetch/main/schema/webfetch-error.schema.json",
+    "title": "webfetch error result",
+    "description": "The JSON shape devilsberg/webfetch produces when a page cannot be fetched, parsed, or extracted. This schema is the public contract: changes are breaking changes.",
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+        "ok",
+        "schema_version",
+        "url",
+        "error_code",
+        "message",
+        "http_status"
+    ],
+    "properties": {
+        "ok": { "const": false },
+        "schema_version": { "const": 1 },
+        "url": { "type": "string" },
+        "error_code": {
+            "enum": [
+                "invalid_url",
+                "connection_failed",
+                "timeout",
+                "too_many_redirects",
+                "response_too_large",
+                "http_client_error",
+                "http_server_error",
+                "not_html",
+                "empty_body",
+                "parse_failure",
+                "empty_extraction"
+            ]
+        },
+        "message": { "type": "string" },
+        "http_status": { "type": ["integer", "null"] }
+    }
+}

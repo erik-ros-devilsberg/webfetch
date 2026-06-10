@@ -11,4 +11,8 @@ namespace Devilsberg\Webfetch\Extractor;
 enum ExtractError: string
 {
     case EmptyExtraction = 'empty_extraction';
+
+    /** Pass-throughs from the parse stage so the pipeline keeps the cause. */
+    case EmptyBody = 'empty_body';
+    case ParseFailed = 'parse_failure';
 }

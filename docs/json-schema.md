@@ -26,6 +26,41 @@ Machine-readable schema: [`schema/webfetch-success.schema.json`](../schema/webfe
 All fields are always present; missing data is `null` (or `[]` for links),
 never an absent key.
 
+## Error shape (`ok: false`, `schema_version: 1`)
+
+Machine-readable schema: [`schema/webfetch-error.schema.json`](../schema/webfetch-error.schema.json).
+The public entry point (`Webfetch::create()->fetch($url)`) never throws for
+pipeline failures — it returns this shape instead.
+
+| Field | Type | Meaning |
+|-------|------|---------|
+| `ok` | `false` | Discriminator. |
+| `schema_version` | `1` | Contract version. |
+| `url` | string | The requested URL (final URL when failure happened after redirects). |
+| `error_code` | string enum | See below. |
+| `message` | string | Human-readable detail. |
+| `http_status` | integer \| null | Set for `http_client_error` / `http_server_error`, null elsewhere. |
+
+### Error codes
+
+| Code | Meaning |
+|------|---------|
+| `invalid_url` | Input is not a syntactically valid http(s) URL. |
+| `connection_failed` | DNS failure, connection refused, or other transport error. |
+| `timeout` | Connect or total timeout exceeded. |
+| `too_many_redirects` | Redirect chain exceeded the configured limit. |
+| `response_too_large` | Body exceeded the size cap (aborted mid-stream). |
+| `http_client_error` | HTTP 4xx. |
+| `http_server_error` | HTTP 5xx. |
+| `not_html` | Content type is not HTML — webfetch does not parse JSON/PDF/etc. |
+| `empty_body` | HTTP 200 but the body is empty/whitespace. |
+| `parse_failure` | The HTML parser failed (near-unreachable with lexbor; reserved). |
+| `empty_extraction` | Markup parsed but yielded no title, description, content, or links — typically a JavaScript-rendered shell. |
+
+`empty_body` vs `empty_extraction`: the former means the server sent
+nothing; the latter means it sent markup with nothing readable in it (the
+SPA case — a headless-browser fetcher is the roadmap answer).
+
 ## Extraction strategies
 
 1. **readability** — fivefilters/readability.php found a main content block

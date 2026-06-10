@@ -97,6 +97,22 @@ and quality gates.
   human docs in `docs/json-schema.md`. Tests validate every success output
   via opis/json-schema (dev dep). Schema changes are breaking.
 
+## Public entry point and error contract (since Error JSON Contract sprint)
+
+- `Webfetch::create(?Fetcher, ?DateTimeImmutable)->fetch(url, ?FetchOptions): string`
+  — URL in, JSON out, never throws for pipeline failures. Factory-based so
+  internals stay free to change; inject a fetcher for tests/Chrome, inject
+  a timestamp for reproducible output.
+- `ErrorCode` enum (`src/ErrorCode.php`) unifies the stage enums into 11
+  public codes; the stage enums deliberately share string values so
+  `ErrorCode::from($stageError->value)` is the whole mapping.
+- Extractor passes parse failures through (`empty_body`, `parse_failure`)
+  instead of folding them into `empty_extraction`.
+- Error contract: `schema/webfetch-error.schema.json`; every code is
+  exercised and schema-validated in `tests/WebfetchTest.php`.
+  `parse_failure` is near-unreachable with lexbor — reserved, pinned via a
+  direct serializer test.
+
 ## Repository layout
 
 - `src/` — `Webfetch` class is a placeholder (VERSION constant only);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Devilsberg\Webfetch\Serializer;
 
+use Devilsberg\Webfetch\ErrorCode;
 use Devilsberg\Webfetch\Extractor\Link;
 use Devilsberg\Webfetch\Extractor\PageContent;
 
@@ -41,6 +42,20 @@ final class JsonSerializer
                 'type' => $content->meta->type,
             ],
             'extraction_strategy' => $content->strategy->value,
+        ];
+
+        return json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+    }
+
+    public function error(ErrorCode $code, string $message, string $url, ?int $httpStatus): string
+    {
+        $payload = [
+            'ok' => false,
+            'schema_version' => self::SCHEMA_VERSION,
+            'url' => $url,
+            'error_code' => $code->value,
+            'message' => $message,
+            'http_status' => $httpStatus,
         ];
 
         return json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
