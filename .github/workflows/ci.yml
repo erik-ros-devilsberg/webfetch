@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist
+
+      - name: Lint, analyse, test
+        run: composer check
+
+      - name: Audit dependencies
+        run: composer audit

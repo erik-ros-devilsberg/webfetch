@@ -33,10 +33,23 @@ and quality gates.
 - The spike's usable/degraded/failed rubric (in `docs/spike-findings.md`)
   becomes the Phase 5 scored corpus gate (≥80% usable, no regressions).
 
+## Tooling and quality gates (since OSS Scaffolding sprint)
+
+- Composer package `devilsberg/webfetch`, MIT, PHP `^8.4`, PSR-4
+  `Devilsberg\Webfetch\` → `src/`, `Devilsberg\Webfetch\Tests\` → `tests/`.
+- Tooling mirrors phagent exactly: PHPUnit 11 (strict flags, random order),
+  PHPStan level 8, php-cs-fixer (@PSR12 + @PHP84Migration +
+  declare_strict_types). `composer check` = lint + analyse + test.
+- CI: `.github/workflows/ci.yml` runs `composer check` + `composer audit`
+  on push/PR. Not yet observed live — no GitHub remote exists; verify when
+  one is added (story 11 at the latest).
+
 ## Repository layout
 
+- `src/` — `Webfetch` class is a placeholder (VERSION constant only); the
+  real entry point arrives with the Fetcher (03/04) and extraction (05)
+  stories.
+- `tests/` — `SmokeTest` covers autoloading; real tests arrive per story.
 - `spike/` — throwaway Phase 0 scripts (`fetch.php`, `extract.php`);
   corpus and vendor are gitignored, reproducible via the scripts. Never
   merged into `src/`.
-- `src/` — does not exist yet; first production code arrives with story 02
-  (scaffolding) and 03 (Fetcher interface).
