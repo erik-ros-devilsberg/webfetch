@@ -113,6 +113,17 @@ and quality gates.
   `parse_failure` is near-unreachable with lexbor — reserved, pinned via a
   direct serializer test.
 
+## CLI (since CLI Entry Point sprint)
+
+- `bin/webfetch <url>` → contract JSON on stdout, nothing else; diagnostics
+  on stderr. Exit codes: 0 ok, 1 error JSON, 2 usage error. Flags:
+  `--timeout`, `--connect-timeout`, `--max-redirects`, `--max-bytes`,
+  `--user-agent`, `--help`.
+- All logic lives in `Cli\Command` (argv in, exit code out, injected
+  streams + fetcher + timestamp) so tests run in-process; `bin/webfetch`
+  is a shim. Declared in composer.json `bin`. No console-framework
+  dependency — parsing this small doesn't justify one.
+
 ## Repository layout
 
 - `src/` — `Webfetch` class is a placeholder (VERSION constant only);

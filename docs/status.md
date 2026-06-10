@@ -10,3 +10,4 @@ Maintained by the agile plugin. One row per sprint — updated by `/agile:shape`
 | HTML Parsing | html-parsing | done | FetchSuccess to \Dom\HTMLDocument with UTF-8 normalization and typed failures. |
 | Readable Content Extraction | readable-content-extraction | done | Core feature: readability + fallback extraction to schema-validated JSON. |
 | Error JSON Contract | error-json-contract | done | Error schema, ErrorCode enum, and the never-throwing Webfetch facade. |
+| CLI Entry Point | cli-entry-point | done | bin/webfetch: URL in, contract JSON on stdout, meaningful exit codes. |
