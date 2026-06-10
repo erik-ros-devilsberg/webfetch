@@ -54,6 +54,8 @@ $json = Webfetch::create()->fetch('https://example.com/article');
 
 Output shapes are a versioned, schema-validated contract — see
 [docs/json-schema.md](docs/json-schema.md) and [schema/](schema/).
+Runnable scripts for every pattern below live in [examples/](examples/) —
+they are lint- and PHPStan-gated, so they stay in sync with the code.
 
 ### Command line
 

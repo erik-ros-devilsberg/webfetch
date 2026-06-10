@@ -204,6 +204,17 @@ and quality gates.
   v1.0.0 tag, Packagist + webhook, flip phagent to `^1.0`). Story 11 stays
   in the backlog until those steps are run with Erik's accounts.
 
+## Examples (since Examples Directory sprint)
+
+- `examples/01-basic-fetch.php` (URL → pretty JSON),
+  `02-error-handling.php` (branching on `error_code`, never-throws demo),
+  `03-spa-fallback.php` (static-first → ChromeFetcher on
+  `empty_extraction`), `04-decorators.php` (caching + rate limiting with a
+  call counter proving the cache hit).
+- `examples/` is in the php-cs-fixer finder and PHPStan paths — examples
+  are gated code, not prose (consequence of the README-staleness
+  incident). No example fetches a live URL implicitly; all take argv.
+
 ## Repository layout
 
 - `src/` — `Webfetch` class is a placeholder (VERSION constant only);
