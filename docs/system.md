@@ -154,6 +154,25 @@ and quality gates.
   can't start. Verified live against snap chromium on this machine
   (2026-06-10): the injected content round-tripped.
 
+## Safety and etiquette (since Hardening — Safety and Etiquette sprint)
+
+- **SSRF guard ON by default** (`UrlGuard`, wired into StaticFetcher and
+  ChromeFetcher's initial URL): private/loopback/link-local IPs,
+  localhost, and hostnames resolving to such IPs → `blocked_url`. Redirect
+  hops are guarded via Guzzle's on_redirect throwing
+  `BlockedRedirectException` (implements GuzzleException so the catch
+  satisfies PHPStan). Best-effort: A-records only, resolve-then-fetch race
+  documented. Opt-out: `FetchOptions(allowPrivateTargets: true)`.
+- **Decorators** (all implement `Fetcher`, all opt-in):
+  `CachingFetcher` (PSR-16, successes only, key `webfetch_<sha1(url)>`),
+  `RateLimitedFetcher` (per-host min interval; clock/sleep closures
+  injectable), `RobotsAwareFetcher` (`User-agent: *` Disallow prefixes,
+  per-origin in-memory cache, injectable robots loader →
+  `robots_disallowed`).
+- **Robots default is OFF** by decision: a user-directed single fetch is
+  browser-like traffic, not crawling; browsers don't consult robots.txt.
+  Crawling-shaped consumers wrap explicitly.
+
 ## Repository layout
 
 - `src/` — `Webfetch` class is a placeholder (VERSION constant only);

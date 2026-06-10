@@ -28,6 +28,8 @@
                 "http_server_error",
                 "not_html",
                 "browser_unavailable",
+                "blocked_url",
+                "robots_disallowed",
                 "empty_body",
                 "parse_failure",
                 "empty_extraction"

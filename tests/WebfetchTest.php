@@ -180,6 +180,27 @@ final class WebfetchTest extends TestCase
         self::assertErrorJson($json, ErrorCode::ParseFailure);
     }
 
+    public function testBlockedUrlReturnsErrorJson(): void
+    {
+        // No mock responses queued: the SSRF guard must refuse before any I/O.
+        $json = self::webfetch([])->fetch('http://169.254.169.254/latest/meta-data/');
+
+        self::assertErrorJson($json, ErrorCode::BlockedUrl);
+    }
+
+    public function testRobotsDisallowedReturnsErrorJson(): void
+    {
+        $handler = HandlerStack::create(new MockHandler([]));
+        $fetcher = new \Devilsberg\Webfetch\Fetcher\RobotsAwareFetcher(
+            new StaticFetcher(new Client(['handler' => $handler])),
+            loadRobots: static fn (string $url): string => "User-agent: *\nDisallow: /private/",
+        );
+
+        $json = Webfetch::create(fetcher: $fetcher)->fetch('https://example.com/private/x');
+
+        self::assertErrorJson($json, ErrorCode::RobotsDisallowed);
+    }
+
     public function testSuccessEndToEndThroughFacade(): void
     {
         $json = self::webfetch([

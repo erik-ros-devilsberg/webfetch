@@ -54,6 +54,8 @@ pipeline failures — it returns this shape instead.
 | `http_server_error` | HTTP 5xx. |
 | `not_html` | Content type is not HTML — webfetch does not parse JSON/PDF/etc. |
 | `browser_unavailable` | ChromeFetcher only: chrome-php/chrome not installed or Chrome failed to start. |
+| `blocked_url` | SSRF guard (on by default): target is private/loopback/link-local, directly or via redirect. `FetchOptions(allowPrivateTargets: true)` disables. |
+| `robots_disallowed` | Only with the opt-in `RobotsAwareFetcher`: robots.txt disallows the path. |
 | `empty_body` | HTTP 200 but the body is empty/whitespace. |
 | `parse_failure` | The HTML parser failed (near-unreachable with lexbor; reserved). |
 | `empty_extraction` | Markup parsed but yielded no title, description, content, or links — typically a JavaScript-rendered shell. |

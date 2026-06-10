@@ -69,6 +69,21 @@ if (json_decode($json, true)['error_code'] ?? null === 'empty_extraction') {
 chrome-php installed it returns a `browser_unavailable` error JSON — it
 never throws.
 
+## Safety and etiquette
+
+- **SSRF guard, on by default**: URLs pointing at private, loopback, or
+  link-local targets (directly or via redirect) are refused with a
+  `blocked_url` error. Agents get pointed at attacker-chosen URLs;
+  internal services should not be reachable through them. Opt out with
+  `new FetchOptions(allowPrivateTargets: true)`. The check is best-effort
+  (documented in `UrlGuard`).
+- **Opt-in decorators** — wrap any `Fetcher`:
+  - `CachingFetcher($inner, $psr16Cache, ttlSeconds: 300)` — successes only
+  - `RateLimitedFetcher($inner, minIntervalSeconds: 1.0)` — per-host spacing
+  - `RobotsAwareFetcher($inner)` — honors `User-agent: *` Disallow rules
+    (`robots_disallowed` error). Off by default: a user-directed single
+    fetch is browser-like traffic; wrap when doing crawling-shaped work.
+
 ## Development
 
 | Command            | What it does                                                  |

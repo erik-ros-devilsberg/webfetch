@@ -12,6 +12,7 @@ final readonly class FetchOptions
         public int $maxRedirects = 5,
         public int $maxBytes = 10_000_000,
         public string $userAgent = 'devilsberg-webfetch/0.1 (+https://packagist.org/packages/devilsberg/webfetch)',
+        public bool $allowPrivateTargets = false,
     ) {
     }
 }

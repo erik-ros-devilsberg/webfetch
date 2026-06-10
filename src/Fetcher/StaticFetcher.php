@@ -34,11 +34,24 @@ final class StaticFetcher implements Fetcher
         $options ??= new FetchOptions();
         $finalUrl = $url;
 
+        if (!$options->allowPrivateTargets && ($reason = UrlGuard::check($url)) !== null) {
+            return new FetchFailure(FetchError::BlockedUrl, $reason);
+        }
+
         try {
             $response = $this->client->request('GET', $url, [
                 'http_errors' => false,
                 'stream' => true,
-                'allow_redirects' => ['max' => $options->maxRedirects],
+                'allow_redirects' => [
+                    'max' => $options->maxRedirects,
+                    // Every redirect hop gets the same SSRF treatment as the
+                    // initial URL — a public page must not bounce us inside.
+                    'on_redirect' => function ($request, $response, $uri) use ($options): void {
+                        if (!$options->allowPrivateTargets && ($reason = UrlGuard::check((string) $uri)) !== null) {
+                            throw new BlockedRedirectException("Redirect blocked: {$reason}");
+                        }
+                    },
+                ],
                 'connect_timeout' => $options->connectTimeout,
                 'timeout' => $options->totalTimeout,
                 'headers' => [
@@ -50,6 +63,8 @@ final class StaticFetcher implements Fetcher
                     $finalUrl = (string) $stats->getEffectiveUri();
                 },
             ]);
+        } catch (BlockedRedirectException $e) {
+            return new FetchFailure(FetchError::BlockedUrl, $e->getMessage());
         } catch (TooManyRedirectsException $e) {
             return new FetchFailure(FetchError::TooManyRedirects, $e->getMessage());
         } catch (ConnectException $e) {
