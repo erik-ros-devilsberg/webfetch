@@ -44,12 +44,29 @@ and quality gates.
   on push/PR. Not yet observed live — no GitHub remote exists; verify when
   one is added (story 11 at the latest).
 
+## Fetching (since Static HTTP Fetcher sprint)
+
+- `Fetcher` interface (`src/Fetcher/`): `fetch(url, ?FetchOptions): FetchOutcome`.
+  No HTTP-client types leak through it — that is what lets a ChromeFetcher
+  (story 09) drop in.
+- `FetchOutcome` is always `FetchSuccess` (finalUrl, status, contentType,
+  charset, body) or `FetchFailure` (`FetchError` enum + message + optional
+  httpStatus/contentType). Consumers branch with `instanceof`.
+- `FetchError` string values (`connection_failed`, `timeout`,
+  `too_many_redirects`, `response_too_large`, `http_client_error`,
+  `http_server_error`, `not_html`) seed the story 06 error JSON contract —
+  renames are breaking.
+- `StaticFetcher` (Guzzle): redirects capped via options, timeout vs
+  connection failure split on cURL errno 28, body streamed in 8KB chunks so
+  the size cap holds against lying Content-Length, charset from header →
+  meta scan (first 4KB) → utf-8, non-HTML content types rejected as
+  `not_html`. Tests use MockHandler only.
+
 ## Repository layout
 
-- `src/` — `Webfetch` class is a placeholder (VERSION constant only); the
-  real entry point arrives with the Fetcher (03/04) and extraction (05)
-  stories.
-- `tests/` — `SmokeTest` covers autoloading; real tests arrive per story.
+- `src/` — `Webfetch` class is a placeholder (VERSION constant only);
+  `src/Fetcher/` holds the fetching seam described above.
+- `tests/` — mirrors `src/`; `SmokeTest` covers autoloading.
 - `spike/` — throwaway Phase 0 scripts (`fetch.php`, `extract.php`);
   corpus and vendor are gitignored, reproducible via the scripts. Never
   merged into `src/`.
