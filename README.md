@@ -14,9 +14,9 @@ links, and metadata. Failures come back as JSON too — agents always get
 something parseable.
 
 Extraction reuses [fivefilters/readability.php](https://github.com/fivefilters/readability.php);
-parsing uses PHP 8.4's lexbor-based `\Dom\HTMLDocument`. JavaScript-rendered
-pages are out of scope for the static fetcher; a headless-Chrome fetcher
-behind the same interface is on the roadmap.
+parsing uses PHP 8.4's lexbor-based `\Dom\HTMLDocument`. Fetching is
+static-first; JavaScript-rendered pages are covered by the optional
+headless-Chrome fetcher (see [SPAs](#javascript-rendered-pages-spas)).
 
 ## Requirements
 
@@ -55,6 +55,17 @@ $json = Webfetch::create()->fetch('https://example.com/article');
 Output shapes are a versioned, schema-validated contract — see
 [docs/json-schema.md](docs/json-schema.md) and [schema/](schema/).
 
+### Command line
+
+```sh
+vendor/bin/webfetch https://example.com/article
+vendor/bin/webfetch --timeout=10 --max-bytes=2000000 https://example.com/article
+```
+
+Prints exactly one JSON document to stdout (diagnostics go to stderr).
+Exit codes: `0` success, `1` fetch/extract error (error JSON still printed),
+`2` usage error. `--help` lists all flags.
+
 ### JavaScript-rendered pages (SPAs)
 
 The default static fetcher cannot see content that JavaScript injects —
@@ -71,7 +82,8 @@ use Devilsberg\Webfetch\Webfetch;
 
 // Static first — fall back to Chrome only when extraction came up empty.
 $json = Webfetch::create()->fetch($url);
-if (json_decode($json, true)['error_code'] ?? null === 'empty_extraction') {
+$result = json_decode($json, true);
+if (($result['error_code'] ?? null) === 'empty_extraction') {
     $json = Webfetch::create(fetcher: new ChromeFetcher())->fetch($url);
 }
 ```
