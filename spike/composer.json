@@ -1,0 +1,12 @@
+{
+    "name": "devilsberg/webfetch-spike",
+    "description": "Throwaway Phase 0 spike — never merged into src/",
+    "license": "MIT",
+    "require": {
+        "php": "^8.4",
+        "fivefilters/readability.php": "^3.3"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

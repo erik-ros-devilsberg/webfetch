@@ -1,0 +1,12 @@
+# Spike artifacts — reproducible via spike/fetch.php, not worth versioning
+spike/vendor/
+spike/corpus/
+
+# Composer (production package, story 02 onward)
+vendor/
+composer.phar
+
+# Tool caches
+.phpunit.cache/
+.phpstan.cache/
+.php-cs-fixer.cache

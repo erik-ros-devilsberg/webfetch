@@ -1,0 +1,336 @@
+{
+    "wikipedia-en": {
+        "slug": "wikipedia-en",
+        "url": "https://en.wikipedia.org/wiki/Web_scraping",
+        "readability": {
+            "title": "Web scraping",
+            "byline": "Contributors to Wikimedia projects",
+            "excerpt": "For broader coverage of this topic, see Data scraping.",
+            "words": 3861,
+            "sample": "For broader coverage of this topic, see Data scraping. \"Web scraper\" redirects here. For websites that scrape content, see Scraper site. Web scraping, web harvesting, or web data extraction is data sc",
+            "error": null
+        },
+        "lexbor": {
+            "title": "Web scraping - Wikipedia",
+            "body_words": 4387,
+            "error": null
+        }
+    },
+    "wikipedia-nl": {
+        "slug": "wikipedia-nl",
+        "url": "https://nl.wikipedia.org/wiki/PHP",
+        "readability": {
+            "title": "PHP",
+            "byline": "Bijdragers aan Wikimedia-projecten",
+            "excerpt": "Uit Wikipedia, de vrije encyclopedie",
+            "words": 1140,
+            "sample": "Uit Wikipedia, de vrije encyclopedie PHP Paradigma Imperatief, Objectgeoriënteerd(vanaf PHP&nbsp;3) Verschenen 8 juni 1995 Ontwerper Rasmus Lerdorf Ontwikkelaar The PHP Group Huidige versie 8.5.7[1]&n",
+            "error": null
+        },
+        "lexbor": {
+            "title": "PHP - Wikipedia",
+            "body_words": 2193,
+            "error": null
+        }
+    },
+    "php-docs": {
+        "slug": "php-docs",
+        "url": "https://www.php.net/manual/en/class.dom-htmldocument.php",
+        "readability": {
+            "title": "PHP: Dom\\HTMLDocument - Manual",
+            "byline": null,
+            "excerpt": "The Dom\\HTMLDocument class",
+            "words": 261,
+            "sample": "final class Dom\\HTMLDocument extends Dom\\Document { /* Inherited constants */ public const int Dom\\Node::DOCUMENT_POSITION_DISCONNECTED = 0x1; public const int Dom\\Node::DOCUMENT_POSITION_PRECEDING = ",
+            "error": null
+        },
+        "lexbor": {
+            "title": "PHP: Dom\\HTMLDocument - Manual",
+            "body_words": 780,
+            "error": null
+        }
+    },
+    "mdn-fetch": {
+        "slug": "mdn-fetch",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+        "readability": {
+            "title": "Fetch API - Web APIs | MDN",
+            "byline": null,
+            "excerpt": "The Fetch API provides an interface for fetching resources (including across the network). It is a more powerful and fle",
+            "words": 377,
+            "sample": "Concepts and usage The Fetch API uses Request and Response objects (and other things involved with network requests), as well as related concepts such as CORS and the HTTP Origin header semantics. For",
+            "error": null
+        },
+        "lexbor": {
+            "title": "Fetch API - Web APIs | MDN",
+            "body_words": 785,
+            "error": null
+        }
+    },
+    "fowler-microservices": {
+        "slug": "fowler-microservices",
+        "url": "https://martinfowler.com/articles/microservices.html",
+        "readability": {
+            "title": "Microservices",
+            "byline": null,
+            "excerpt": "Defining the microservices architectural style by describing their nine common characteristics",
+            "words": 5294,
+            "sample": "“Microservices” - yet another new term on the crowded streets of software architecture. Although our natural inclination is to pass such things by with a contemptuous glance, this bit of terminology d",
+            "error": null
+        },
+        "lexbor": {
+            "title": "Microservices",
+            "body_words": 7807,
+            "error": null
+        }
+    },
+    "paulgraham-essay": {
+        "slug": "paulgraham-essay",
+        "url": "https://paulgraham.com/greatwork.html",
+        "readability": {
+            "title": "How to Do Great Work",
+            "byline": null,
+            "excerpt": "If you collected lists of techniques for doing great work in a lot\nof different fields, what would the intersection look",
+            "words": 11734,
+            "sample": "July 2023If you collected lists of techniques for doing great work in a lot of different fields, what would the intersection look like? I decided to find out by making it.Partly my goal was to create ",
+            "error": null
+        },
+        "lexbor": {
+            "title": "How to Do Great Work",
+            "body_words": 11733,
+            "error": null
+        }
+    },
+    "daringfireball": {
+        "slug": "daringfireball",
+        "url": "https://daringfireball.net/projects/markdown/",
+        "readability": {
+            "title": "Daring Fireball: Markdown",
+            "byline": null,
+            "excerpt": "Markdown 1.0.1 (18 KB) — 17 Dec 2004",
+            "words": 1071,
+            "sample": "Download Markdown 1.0.1 (18 KB) — 17 Dec 2004 Introduction Markdown is a text-to-HTML conversion tool for web writers. Markdown allows you to write using an easy-to-read, easy-to-write plain text form",
+            "error": null
+        },
+        "lexbor": {
+            "title": "Daring Fireball: Markdown",
+            "body_words": 1109,
+            "error": null
+        }
+    },
+    "stackoverflow": {
+        "slug": "stackoverflow",
+        "url": "https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array",
+        "readability": {
+            "title": "Why is conditional processing of a sorted array faster than of an unsorted array?",
+            "byline": null,
+            "excerpt": "In this C++ code, sorting the data (before the timed region) makes the primary loop ~6x faster:\n#include <algorithm>\n#in",
+            "words": 1130,
+            "sample": "You are a victim of branch prediction fail. What is Branch Prediction? Consider a railroad junction: Image by Mecanismo, via Wikimedia Commons. Used under the CC-By-SA 3.0 license. Now for the sake of",
+            "error": null
+        },
+        "lexbor": {
+            "title": "java - Why is conditional processing of a sorted array faster than of an unsorted array? - Stack Overflow",
+            "body_words": 17223,
+            "error": null
+        }
+    },
+    "hackernews": {
+        "slug": "hackernews",
+        "url": "https://news.ycombinator.com/",
+        "readability": {
+            "title": "Hacker News",
+            "byline": null,
+            "excerpt": "",
+            "words": 547,
+            "sample": "1.Building an HTML-first site doubled our users overnight (mohkohn.co.uk)292 points by edent 2 hours ago | hide | 119&nbsp;comments2.PgDog is funded and coming to a database near you (pgdog.dev)62 poi",
+            "error": null
+        },
+        "lexbor": {
+            "title": "Hacker News",
+            "body_words": 536,
+            "error": null
+        }
+    },
+    "bbc-news-index": {
+        "slug": "bbc-news-index",
+        "url": "https://www.bbc.com/news",
+        "readability": {
+            "title": "BBC News - Breaking news, video and the latest top stories from the U.S. and around the world",
+            "byline": null,
+            "excerpt": "Visit BBC News for the latest news, breaking news, video, audio and analysis. BBC News provides trusted World, U.S. and ",
+            "words": 918,
+            "sample": "LIVEFamily of Belfast knife victim say 'unrest is not welcome' as extra police brought onto streetsThe family of Stephen Ogilvy say \"peaceful protest is the only way forward\". Public transport is clos",
+            "error": null
+        },
+        "lexbor": {
+            "title": "BBC News - Breaking news, video and the latest top stories from the U.S. and around the world",
+            "body_words": 1454,
+            "error": null
+        }
+    },
+    "guardian-index": {
+        "slug": "guardian-index",
+        "url": "https://www.theguardian.com/international",
+        "readability": {
+            "title": "Latest news, sport and opinion from the Guardian",
+            "byline": null,
+            "excerpt": "Latest international news, sport and comment from the Guardian",
+            "words": 1981,
+            "sample": "Middle EastMiddle East peace talks in doubt as Iran says it needs to ‘reassess’ after overnight strikesUS launches strikes in retaliation for downing of US army helicopter, while White House source sa",
+            "error": null
+        },
+        "lexbor": {
+            "title": "Latest news, sport and opinion from the Guardian",
+            "body_words": 3164,
+            "error": null
+        }
+    },
+    "nu-nl-index": {
+        "slug": "nu-nl-index",
+        "url": "https://www.nu.nl/",
+        "readability": {
+            "error": "Could not parse text.",
+            "words": 0,
+            "title": null
+        },
+        "lexbor": {
+            "title": "DPG Media Privacy Gate",
+            "body_words": 0,
+            "error": null
+        }
+    },
+    "github-repo": {
+        "slug": "github-repo",
+        "url": "https://github.com/php/php-src",
+        "readability": {
+            "title": "GitHub - php/php-src: The PHP Interpreter",
+            "byline": null,
+            "excerpt": "The PHP Interpreter. Contribute to php/php-src development by creating an account on GitHub.",
+            "words": 630,
+            "sample": "PHP is a popular general-purpose scripting language that is especially suited to web development. Fast, flexible and pragmatic, PHP powers everything from your blog to the most popular websites in the",
+            "error": null
+        },
+        "lexbor": {
+            "title": "GitHub - php/php-src: The PHP Interpreter · GitHub",
+            "body_words": 1123,
+            "error": null
+        }
+    },
+    "react-docs": {
+        "slug": "react-docs",
+        "url": "https://react.dev/learn",
+        "readability": {
+            "title": "Quick Start – React",
+            "byline": null,
+            "excerpt": "The library for web and native user interfaces",
+            "words": 1991,
+            "sample": "Welcome to the React documentation! This page will give you an introduction to 80% of the React concepts that you will use on a daily basis. You will learn How to create and nest components How to add",
+            "error": null
+        },
+        "lexbor": {
+            "title": "Quick Start – React",
+            "body_words": 2067,
+            "error": null
+        }
+    },
+    "excalidraw-spa": {
+        "slug": "excalidraw-spa",
+        "url": "https://excalidraw.com/",
+        "readability": {
+            "error": "Could not parse text.",
+            "words": 0,
+            "title": null
+        },
+        "lexbor": {
+            "title": "Excalidraw Whiteboard",
+            "body_words": 1,
+            "error": null
+        }
+    },
+    "notion-landing": {
+        "slug": "notion-landing",
+        "url": "https://www.notion.so/",
+        "readability": {
+            "title": "The AI workspace that works for you. | Notion",
+            "byline": null,
+            "excerpt": "Build Custom Agents, search across all your apps, and automate busywork. The AI workspace where teams get more done, fas",
+            "words": 143,
+            "sample": "Keep work moving 24/7.See what Custom Agents can do&nbsp;Triage product feedback&nbsp;Resolve support tickets in Slack&nbsp;Respond to security alerts faster&nbsp;Automate weekly reportingAsk your on-",
+            "error": null
+        },
+        "lexbor": {
+            "title": "The AI workspace that works for you. | Notion",
+            "body_words": 506,
+            "error": null
+        }
+    },
+    "whatwg-spec": {
+        "slug": "whatwg-spec",
+        "url": "https://html.spec.whatwg.org/multipage/introduction.html",
+        "readability": {
+            "title": "HTML Standard",
+            "byline": null,
+            "excerpt": "Living Standard — Last Updated 10 June 2026",
+            "words": 8561,
+            "sample": "Living Standard — Last Updated 10 June 2026 Table of Contents — 2 Common infrastructure →1 Introduction1.1 Where does this specification fit?1.2 Is this HTML5?1.3 Background1.4 Audience1.5 Scope1.6 Hi",
+            "error": null
+        },
+        "lexbor": {
+            "title": "HTML Standard",
+            "body_words": 8311,
+            "error": null
+        }
+    },
+    "keepachangelog": {
+        "slug": "keepachangelog",
+        "url": "https://keepachangelog.com/en/1.1.0/",
+        "readability": {
+            "title": "Keep a Changelog",
+            "byline": null,
+            "excerpt": "Don’t let your friends dump git logs into changelogs.",
+            "words": 1051,
+            "sample": "What is a changelog? A changelog is a file which contains a curated, chronologically ordered list of notable changes for each version of a project. Why keep a changelog? To make it easier for users an",
+            "error": null
+        },
+        "lexbor": {
+            "title": "Keep a Changelog",
+            "body_words": 2298,
+            "error": null
+        }
+    },
+    "wordpress-blog": {
+        "slug": "wordpress-blog",
+        "url": "https://wordpress.org/news/",
+        "readability": {
+            "title": "WordPress News – The latest news about WordPress and the WordPress community",
+            "byline": null,
+            "excerpt": "WordPress is open-source software created by a global community. There are many ways to get involved, whether through co",
+            "words": 26,
+            "sample": "Contribute to WordPress WordPress is open-source software created by a global community. There are many ways to get involved, whether through code, design, documentation, and more.",
+            "error": null
+        },
+        "lexbor": {
+            "title": "WordPress News – The latest news about WordPress and the WordPress community",
+            "body_words": 286,
+            "error": null
+        }
+    },
+    "arstechnica-index": {
+        "slug": "arstechnica-index",
+        "url": "https://arstechnica.com/",
+        "readability": {
+            "title": "Ars Technica",
+            "byline": null,
+            "excerpt": "News and reviews, covering IT, AI, science, space, health, gaming, cybersecurity, tech policy, computers, mobile devices",
+            "words": 155,
+            "sample": "Ars Technica has been separating the signal from the noise for over 25 years. With our unique combination of technical savvy and wide-ranging interest in the technological arts and sciences, Ars is th",
+            "error": null
+        },
+        "lexbor": {
+            "title": "Ars Technica - Serving the Technologist since 1998. News, reviews, and analysis.",
+            "body_words": 1316,
+            "error": null
+        }
+    }
+}
