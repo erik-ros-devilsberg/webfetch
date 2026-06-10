@@ -13,10 +13,14 @@
         "league/html-to-markdown": "^5.1"
     },
     "require-dev": {
+        "chrome-php/chrome": "^1.15",
         "friendsofphp/php-cs-fixer": "^3.64",
         "opis/json-schema": "^2.4",
         "phpstan/phpstan": "^2.0",
         "phpunit/phpunit": "^11.4"
+    },
+    "suggest": {
+        "chrome-php/chrome": "Enables ChromeFetcher for JavaScript-rendered pages (requires a Chrome/Chromium binary)"
     },
     "bin": ["bin/webfetch"],
     "autoload": {

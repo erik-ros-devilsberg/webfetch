@@ -6,6 +6,9 @@ spike/corpus/
 vendor/
 composer.phar
 
+# Chrome profile used by the integration test
+tests/chrome-profile/
+
 # Tool caches
 .phpunit.cache/
 .phpstan.cache/

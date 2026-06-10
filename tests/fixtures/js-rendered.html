@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JS Rendered Page</title>
+</head>
+<body>
+    <div id="root"></div>
+    <script>
+        document.getElementById('root').innerHTML = [
+            '<article>',
+            '<h1>Rendered by JavaScript</h1>',
+            '<p>This paragraph does not exist in the HTML source at all. It is injected',
+            'by a script at load time, which is exactly what single page applications do',
+            'and exactly what the static fetcher cannot see. If this text shows up in a',
+            'fetch result, the fetch went through a real browser engine that executed',
+            'the script before handing back the document object model as markup.</p>',
+            '</article>',
+        ].join('\n');
+    </script>
+</body>
+</html>

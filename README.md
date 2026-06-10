@@ -43,6 +43,32 @@ $json = Webfetch::create()->fetch('https://example.com/article');
 Output shapes are a versioned, schema-validated contract — see
 [docs/json-schema.md](docs/json-schema.md) and [schema/](schema/).
 
+### JavaScript-rendered pages (SPAs)
+
+The default static fetcher cannot see content that JavaScript injects —
+those pages come back as an `empty_extraction` error. For them, install
+the optional headless-Chrome backend (plus a Chrome/Chromium binary):
+
+```sh
+composer require chrome-php/chrome
+```
+
+```php
+use Devilsberg\Webfetch\Fetcher\ChromeFetcher;
+use Devilsberg\Webfetch\Webfetch;
+
+// Static first — fall back to Chrome only when extraction came up empty.
+$json = Webfetch::create()->fetch($url);
+if (json_decode($json, true)['error_code'] ?? null === 'empty_extraction') {
+    $json = Webfetch::create(fetcher: new ChromeFetcher())->fetch($url);
+}
+```
+
+`ChromeFetcher` accepts a binary path, wait strategy (`load` /
+`networkIdle`), an extra render delay, and a profile directory. Without
+chrome-php installed it returns a `browser_unavailable` error JSON — it
+never throws.
+
 ## Development
 
 | Command            | What it does                                                  |

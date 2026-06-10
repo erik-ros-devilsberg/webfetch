@@ -18,4 +18,5 @@ enum FetchError: string
     case HttpClientError = 'http_client_error';
     case HttpServerError = 'http_server_error';
     case NotHtml = 'not_html';
+    case BrowserUnavailable = 'browser_unavailable';
 }

@@ -22,6 +22,7 @@ enum ErrorCode: string
     case HttpClientError = 'http_client_error';
     case HttpServerError = 'http_server_error';
     case NotHtml = 'not_html';
+    case BrowserUnavailable = 'browser_unavailable';
     case EmptyBody = 'empty_body';
     case ParseFailure = 'parse_failure';
     case EmptyExtraction = 'empty_extraction';

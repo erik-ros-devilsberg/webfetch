@@ -136,6 +136,24 @@ and quality gates.
   provider, PSR-18 client, v0.0.1); the tool commit was rebased on top,
   lock regenerated, full suite green (40 tests).
 
+## SPA fetching (since Chrome SPA Fetcher sprint)
+
+- `ChromeFetcher` implements the same `Fetcher` seam via chrome-php/chrome
+  (OPTIONAL dependency: require-dev + suggest; absent at runtime →
+  `browser_unavailable` error, never a throw). Options: binary path, wait
+  event (`load`/`networkIdle`), extra render delay, profile dir, noSandbox
+  (default true — container reality).
+- FetchOptions mapping: totalTimeout → navigation + DOM-read timeout;
+  userAgent → browser flag; maxBytes checked on the rendered DOM. Rendered
+  pages report status 200 (CDP status not reliably observable via the
+  high-level API — documented in the class docblock).
+- Recommended pattern (README): static fetch first, retry with
+  ChromeFetcher only on `empty_extraction`.
+- Integration test renders a file:// fixture whose content is
+  JS-injected; it skips without a Chrome binary or when a sandboxed Chrome
+  can't start. Verified live against snap chromium on this machine
+  (2026-06-10): the injected content round-tripped.
+
 ## Repository layout
 
 - `src/` — `Webfetch` class is a placeholder (VERSION constant only);

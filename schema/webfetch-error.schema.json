@@ -27,6 +27,7 @@
                 "http_client_error",
                 "http_server_error",
                 "not_html",
+                "browser_unavailable",
                 "empty_body",
                 "parse_failure",
                 "empty_extraction"

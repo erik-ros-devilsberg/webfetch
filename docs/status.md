@@ -12,3 +12,4 @@ Maintained by the agile plugin. One row per sprint — updated by `/agile:shape`
 | Error JSON Contract | error-json-contract | done | Error schema, ErrorCode enum, and the never-throwing Webfetch facade. |
 | CLI Entry Point | cli-entry-point | done | bin/webfetch: URL in, contract JSON on stdout, meaningful exit codes. |
 | Phagent WebFetchTool | phagent-webfetch-tool | done | web_fetch tool in phagent wrapping devilsberg/webfetch via path repo. |
+| Chrome SPA Fetcher | chrome-spa-fetcher | done | Optional headless-Chrome Fetcher for JS-rendered pages, same contract. |
