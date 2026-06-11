@@ -1,10 +1,7 @@
 # devilsberg/webfetch
 
 Open-source PHP library that turns a webpage into readable-content JSON
-(title, byline, markdown content, links, metadata). Built to power a
-WebFetch tool for [phagent](../phagent/), but standalone — this package
-must never depend on phagent; the `WebFetchTool` adapter lives in the
-phagent repo.
+(title, byline, markdown content, links, metadata). 
 
 See `docs/roadmap.md` for phases and the decisions behind them.
 
@@ -13,13 +10,36 @@ See `docs/roadmap.md` for phases and the decisions behind them.
 - PHP `^8.4` — use the new `\Dom\HTMLDocument` (lexbor), not legacy `DOMDocument`
 - License: MIT. This is a public open-source contribution — keep code,
   docs, and commit history publishable
-- Tooling mirrors phagent: Guzzle, PHPUnit 11, PHPStan level 8,
-  php-cs-fixer; `composer check` = lint + analyse + test, run it before
-  any commit
 - PSR-4: `Devilsberg\Webfetch\` → `src/`, tests in `tests/`
+- Tooling mirrors phagent: Guzzle, PHPUnit 11, PHPStan level 8
+- **`composer check`** (php-cs-fixer + PHPStan level 8 + PHPUnit) — every
+  story, every commit; CI runs it on push and PR.
+- **`composer audit`** in CI — a vulnerable dependency fails the build.
 - Architecture: pluggable `Fetcher` interface — static HTTP fetcher first,
   headless Chrome (CDP) adapter for SPAs in a later phase
 - Output is a stable, versioned JSON schema; errors are JSON too
+
+## Quality gates
+
+- **JSON Schema conformance** — success and error schemas live in the repo
+  as machine-readable JSON Schema files; the test suite validates all
+  outputs against them. The schema is the public contract; schema changes
+  are breaking changes.
+- **Scored extraction corpus** (from Phase 5) — real-world fixture pages
+  rated usable / degraded / failed with the Phase 0 rubric; gate fails
+  below 80% usable or on any regression vs the committed baseline.
+  Implemented: `tests/Corpus/CorpusGateTest.php` over `tests/corpus/`
+  (redistributable pages only — see `tests/corpus/ATTRIBUTION.md`).
+  Baseline expectations are calibrated against a reader-mode reference
+  (Firefox Reader Mode; Anthropic WebFetch as a second opinion), never
+  against our own current output — a baseline that pins a bug is worse
+  than no baseline.
+- **Coverage: report, don't gate** — coverage badge on the README; no
+  threshold, TDD is enforced by process instead.
+- **No live network in the test suite** — all fetches mocked or fixtures.
+- **Post-1.0 candidates**: mutation testing (Infection), performance
+  budgets.
+
 
 ## Agile Workflow
 
@@ -52,6 +72,7 @@ This project uses the agile plugin. Follow these rules when building features.
 - Developer writes tests first, then implements — never skip writing tests
 - Review is user invoked — trigger it with `/agile:review`
 - Defects found in review become new user stories
+- Do not make changes outside project directory
 
 ### Directory structure
 

@@ -26,6 +26,7 @@ final readonly class PageContent
         public array $links,
         public PageMeta $meta,
         public ExtractionStrategy $strategy,
+        public SourceType $sourceType,
     ) {
     }
 }

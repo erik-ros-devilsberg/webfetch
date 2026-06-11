@@ -15,7 +15,7 @@ use Devilsberg\Webfetch\Extractor\PageContent;
  */
 final class JsonSerializer
 {
-    public const int SCHEMA_VERSION = 1;
+    public const int SCHEMA_VERSION = 2;
 
     public function success(PageContent $content, string $url, \DateTimeImmutable $fetchedAt): string
     {
@@ -24,6 +24,7 @@ final class JsonSerializer
             'schema_version' => self::SCHEMA_VERSION,
             'url' => $url,
             'fetched_at' => $fetchedAt->format(\DateTimeInterface::ATOM),
+            'source_type' => $content->sourceType->value,
             'title' => $content->title,
             'byline' => $content->byline,
             'lang' => $content->lang,

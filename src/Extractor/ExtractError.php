@@ -12,6 +12,9 @@ enum ExtractError: string
 {
     case EmptyExtraction = 'empty_extraction';
 
+    /** No extractor registered for the response's content type. */
+    case NotHtml = 'not_html';
+
     /** Pass-throughs from the parse stage so the pipeline keeps the cause. */
     case EmptyBody = 'empty_body';
     case ParseFailed = 'parse_failure';

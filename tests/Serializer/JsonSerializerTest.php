@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Devilsberg\Webfetch\Tests\Serializer;
 
-use Devilsberg\Webfetch\Extractor\Extractor;
 use Devilsberg\Webfetch\Extractor\ExtractSuccess;
+use Devilsberg\Webfetch\Extractor\HtmlExtractor;
 use Devilsberg\Webfetch\Fetcher\FetchSuccess;
 use Devilsberg\Webfetch\Serializer\JsonSerializer;
 use Opis\JsonSchema\Validator;
@@ -27,7 +27,7 @@ final class JsonSerializerTest extends TestCase
             body: $html,
         );
 
-        $outcome = new Extractor()->extract($fetch);
+        $outcome = new HtmlExtractor()->extract($fetch);
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
 
         return new JsonSerializer()->success(
@@ -83,9 +83,10 @@ final class JsonSerializerTest extends TestCase
         $decoded = json_decode(self::successJsonFor('article.html'), true, 512, JSON_THROW_ON_ERROR);
 
         self::assertTrue($decoded['ok']);
-        self::assertSame(1, $decoded['schema_version']);
+        self::assertSame(2, $decoded['schema_version']);
         self::assertSame('https://example.com/page', $decoded['url']);
         self::assertSame(self::FETCHED_AT, $decoded['fetched_at']);
+        self::assertSame('html', $decoded['source_type']);
     }
 
     public function testJsonIsValidUnescapedUtf8(): void

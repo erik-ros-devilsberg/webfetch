@@ -213,5 +213,6 @@ final class WebfetchTest extends TestCase
         self::assertTrue($decoded['ok']);
         self::assertSame('https://example.com/article', $decoded['url']);
         self::assertSame('2026-06-10T12:00:00+00:00', $decoded['fetched_at']);
+        self::assertSame('html', $decoded['source_type']);
     }
 }

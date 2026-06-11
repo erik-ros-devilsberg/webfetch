@@ -4,14 +4,15 @@ Machine-readable schema: [`schema/webfetch-success.schema.json`](../schema/webfe
 (draft-07). The test suite validates every success output against it.
 **Schema changes are breaking changes** — bump the major version.
 
-## Success shape (`ok: true`, `schema_version: 1`)
+## Success shape (`ok: true`, `schema_version: 2`)
 
 | Field | Type | Meaning |
 |-------|------|---------|
 | `ok` | `true` | Discriminator — success and error outputs share this single field. |
-| `schema_version` | `1` | Contract version. |
+| `schema_version` | `2` | Contract version. |
 | `url` | string | Final URL after redirects. |
 | `fetched_at` | string (RFC 3339) | When the page was fetched. |
+| `source_type` | `"html"` | Which source format the content was extracted from. More formats (e.g. `pdf`) join this as their extractors land. |
 | `title` | string \| null | Page title (readability → og:title → `<title>`). |
 | `byline` | string \| null | Author via readability's detection, suppressed when it merely echoes site-wide `meta[name=author]` on a non-article page. Null when unknown — honest nulls over site chrome. |
 | `lang` | string \| null | `<html lang>` attribute. |
@@ -26,7 +27,7 @@ Machine-readable schema: [`schema/webfetch-success.schema.json`](../schema/webfe
 All fields are always present; missing data is `null` (or `[]` for links),
 never an absent key.
 
-## Error shape (`ok: false`, `schema_version: 1`)
+## Error shape (`ok: false`, `schema_version: 2`)
 
 Machine-readable schema: [`schema/webfetch-error.schema.json`](../schema/webfetch-error.schema.json).
 The public entry point (`Webfetch::create()->fetch($url)`) never throws for
@@ -35,7 +36,7 @@ pipeline failures — it returns this shape instead.
 | Field | Type | Meaning |
 |-------|------|---------|
 | `ok` | `false` | Discriminator. |
-| `schema_version` | `1` | Contract version. |
+| `schema_version` | `2` | Contract version. |
 | `url` | string | The requested URL (final URL when failure happened after redirects). |
 | `error_code` | string enum | See below. |
 | `message` | string | Human-readable detail. |

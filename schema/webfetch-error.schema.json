@@ -15,7 +15,7 @@
     ],
     "properties": {
         "ok": { "const": false },
-        "schema_version": { "const": 1 },
+        "schema_version": { "const": 2 },
         "url": { "type": "string" },
         "error_code": {
             "enum": [

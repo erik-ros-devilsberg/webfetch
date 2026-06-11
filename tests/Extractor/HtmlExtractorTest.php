@@ -7,12 +7,12 @@ namespace Devilsberg\Webfetch\Tests\Extractor;
 use Devilsberg\Webfetch\Extractor\ExtractError;
 use Devilsberg\Webfetch\Extractor\ExtractFailure;
 use Devilsberg\Webfetch\Extractor\ExtractionStrategy;
-use Devilsberg\Webfetch\Extractor\Extractor;
 use Devilsberg\Webfetch\Extractor\ExtractSuccess;
+use Devilsberg\Webfetch\Extractor\HtmlExtractor;
 use Devilsberg\Webfetch\Fetcher\FetchSuccess;
 use PHPUnit\Framework\TestCase;
 
-final class ExtractorTest extends TestCase
+final class HtmlExtractorTest extends TestCase
 {
     private static function fetchFixture(string $name, string $url = 'https://example.com/page'): FetchSuccess
     {
@@ -30,7 +30,7 @@ final class ExtractorTest extends TestCase
 
     public function testArticleExtractsFullMetadata(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('article.html'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('article.html'));
 
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
         $content = $outcome->content;
@@ -49,7 +49,7 @@ final class ExtractorTest extends TestCase
 
     public function testArticleMarkdownPreservesStructure(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('article.html'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('article.html'));
 
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
         $markdown = $outcome->content->contentMarkdown;
@@ -62,7 +62,7 @@ final class ExtractorTest extends TestCase
 
     public function testArticleScriptContentIsAbsent(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('article.html'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('article.html'));
 
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
         self::assertStringNotContainsString('analyticsBeacon', $outcome->content->contentMarkdown);
@@ -70,7 +70,7 @@ final class ExtractorTest extends TestCase
 
     public function testArticleCollectsContentLinks(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('article.html'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('article.html'));
 
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
         $hrefs = array_map(static fn ($link) => $link->href, $outcome->content->links);
@@ -79,7 +79,7 @@ final class ExtractorTest extends TestCase
 
     public function testDocsPageExtracts(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('docs.html'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('docs.html'));
 
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
         $content = $outcome->content;
@@ -90,7 +90,7 @@ final class ExtractorTest extends TestCase
 
     public function testMinimalPageExtractsWithNullMetadata(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('minimal.html'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('minimal.html'));
 
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
         $content = $outcome->content;
@@ -103,7 +103,7 @@ final class ExtractorTest extends TestCase
 
     public function testListingPageTriggersFallback(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('listing-trap.html'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('listing-trap.html'));
 
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
         $content = $outcome->content;
@@ -116,7 +116,7 @@ final class ExtractorTest extends TestCase
 
     public function testFallbackResolvesRelativeLinkUrls(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('listing-trap.html', 'https://news.example.com/front'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('listing-trap.html', 'https://news.example.com/front'));
 
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
         $hrefs = array_map(static fn ($link) => $link->href, $outcome->content->links);
@@ -125,7 +125,7 @@ final class ExtractorTest extends TestCase
 
     public function testHighlightedCodeBlocksAreCleaned(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('highlighted-code.html'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('highlighted-code.html'));
 
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
         $markdown = $outcome->content->contentMarkdown;
@@ -136,7 +136,7 @@ final class ExtractorTest extends TestCase
 
     public function testEntitiesInCodeDecodeToPlainText(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('highlighted-code.html'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('highlighted-code.html'));
 
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
         self::assertStringContainsString('Generator<int>', $outcome->content->contentMarkdown);
@@ -144,7 +144,7 @@ final class ExtractorTest extends TestCase
 
     public function testTablesConvertToMarkdownTables(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('highlighted-code.html'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('highlighted-code.html'));
 
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
         $markdown = $outcome->content->contentMarkdown;
@@ -155,7 +155,7 @@ final class ExtractorTest extends TestCase
 
     public function testSiteWideMetaAuthorIsNotAByline(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('highlighted-code.html'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('highlighted-code.html'));
 
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
         // meta[name=author] says "Registry Operator" — site chrome, not a byline.
@@ -164,7 +164,7 @@ final class ExtractorTest extends TestCase
 
     public function testEmptyShellFailsWithEmptyExtraction(): void
     {
-        $outcome = new Extractor()->extract(self::fetchFixture('empty-shell.html'));
+        $outcome = new HtmlExtractor()->extract(self::fetchFixture('empty-shell.html'));
 
         self::assertInstanceOf(ExtractFailure::class, $outcome);
         self::assertSame(ExtractError::EmptyExtraction, $outcome->error);

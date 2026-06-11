@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Devilsberg\Webfetch\Tests\Corpus;
 
-use Devilsberg\Webfetch\Extractor\Extractor;
 use Devilsberg\Webfetch\Extractor\ExtractSuccess;
+use Devilsberg\Webfetch\Extractor\HtmlExtractor;
 use Devilsberg\Webfetch\Fetcher\FetchSuccess;
 use Devilsberg\Webfetch\Serializer\JsonSerializer;
 use Opis\JsonSchema\Validator;
@@ -50,7 +50,7 @@ final class CorpusGateTest extends TestCase
 
     public function testEveryCorpusPageMeetsItsBaseline(): void
     {
-        $extractor = new Extractor();
+        $extractor = new HtmlExtractor();
         $serializer = new JsonSerializer();
         $validator = new Validator();
         $schemaJson = file_get_contents(__DIR__ . '/../../schema/webfetch-success.schema.json');

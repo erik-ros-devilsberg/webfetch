@@ -11,6 +11,19 @@ major version, even if no PHP signature changed.
 
 ## [Unreleased]
 
+### Changed
+
+- **Breaking (schema):** `schema_version` is now `2`. Success output gains a
+  `source_type` field (currently always `"html"`) so consumers can tell which
+  source format the content came from as document formats (e.g. PDF) land.
+
+### Added
+
+- Content-type-dispatched extraction: a pluggable `Extractor` interface with
+  `HtmlExtractor` as the `text/html` implementation and a `DispatchingExtractor`
+  that selects the extractor by response content type. This is the seam new
+  source formats plug into; an unsupported content type returns `not_html`.
+
 ## [1.0.0] - 2026-06-10
 
 First public release.

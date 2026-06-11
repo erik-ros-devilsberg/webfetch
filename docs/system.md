@@ -79,7 +79,16 @@ and quality gates.
 
 ## Extraction and JSON output (since Readable Content Extraction sprint)
 
-- `Extractor` (`src/Extractor/`): `extract(FetchSuccess): ExtractOutcome`.
+- `Extractor` (`src/Extractor/`) is an **interface**
+  (`extract(FetchSuccess): ExtractOutcome`), selected by content type by
+  `DispatchingExtractor` (since Extractor Dispatch Seam sprint). An
+  unsupported content type returns `not_html` — the same public code the
+  static fetcher's HTML gate emits — so non-HTML behaviour is unchanged.
+  This keeps byte-interpretation out of the fetch layer: the fetcher only
+  reports a content type, the dispatcher picks the matching extractor.
+  `HtmlExtractor` is the `text/html` implementation; document formats
+  (e.g. PDF) plug in behind the same seam with no fetch/serialize changes.
+- `HtmlExtractor` (the `text/html` path):
   Primary path: fivefilters/readability.php (charThreshold 100,
   fixRelativeURLs against the final URL). Fallback triggers when content is
   null, <30 words, or <10% of body words — it builds title + meta
@@ -106,7 +115,11 @@ and quality gates.
   in the 2026-06-10 live comparison.
 - `JsonSerializer` (`src/Serializer/`): `success(PageContent, url,
   DateTimeImmutable)` → JSON string. Clock is a parameter — tests inject a
-  fixed instant. Discriminator field `ok`; `schema_version` 1.
+  fixed instant. Discriminator field `ok`; `schema_version` 2 (bumped from
+  1 by the Extractor Dispatch Seam sprint). Success output carries
+  `source_type` (a `SourceType` enum on `PageContent`, currently always
+  `html`) so consumers can tell which source format produced the content;
+  both schemas are `const: 2`.
 - Public contract: `schema/webfetch-success.schema.json` (draft-07),
   human docs in `docs/json-schema.md`. Tests validate every success output
   via opis/json-schema (dev dep). Schema changes are breaking.
@@ -191,7 +204,7 @@ and quality gates.
 
 - `tests/Corpus/CorpusGateTest.php` runs 11 committed pages (7 real,
   redistributable-only — licenses in `tests/corpus/ATTRIBUTION.md` — plus
-  4 synthetic fixtures) through Extractor + JsonSerializer on every
+  4 synthetic fixtures) through HtmlExtractor + JsonSerializer on every
   `composer check`.
 - `tests/corpus/baseline.json` is the machine form of the spike rubric:
   per page expected strategy, min word count, content fingerprint, title

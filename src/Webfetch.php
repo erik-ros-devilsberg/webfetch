@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Devilsberg\Webfetch;
 
+use Devilsberg\Webfetch\Extractor\DispatchingExtractor;
 use Devilsberg\Webfetch\Extractor\ExtractFailure;
 use Devilsberg\Webfetch\Extractor\Extractor;
 use Devilsberg\Webfetch\Extractor\ExtractSuccess;
@@ -39,7 +40,7 @@ final class Webfetch
     {
         return new self(
             $fetcher ?? new StaticFetcher(),
-            new Extractor(),
+            new DispatchingExtractor(),
             new JsonSerializer(),
             $fetchedAt,
         );
