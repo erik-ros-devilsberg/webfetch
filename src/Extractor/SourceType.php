@@ -13,4 +13,5 @@ namespace Devilsberg\Webfetch\Extractor;
 enum SourceType: string
 {
     case Html = 'html';
+    case Pdf = 'pdf';
 }

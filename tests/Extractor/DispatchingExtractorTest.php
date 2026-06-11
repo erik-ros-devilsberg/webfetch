@@ -48,6 +48,16 @@ final class DispatchingExtractorTest extends TestCase
         self::assertInstanceOf(ExtractSuccess::class, $outcome);
     }
 
+    public function testPdfRoutesToPdfExtractorAndTagsSourceType(): void
+    {
+        $pdf = \Devilsberg\Webfetch\Tests\Support\MinimalPdf::withText('routed ZQX pdf body');
+
+        $outcome = new DispatchingExtractor()->extract(self::fetch('application/pdf', $pdf));
+
+        self::assertInstanceOf(ExtractSuccess::class, $outcome);
+        self::assertSame(SourceType::Pdf, $outcome->content->sourceType);
+    }
+
     public function testUnsupportedContentTypeReturnsNotHtml(): void
     {
         $outcome = new DispatchingExtractor()->extract(self::fetch('application/json', '{}'));

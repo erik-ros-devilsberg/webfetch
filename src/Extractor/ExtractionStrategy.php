@@ -11,4 +11,7 @@ enum ExtractionStrategy: string
 {
     case Readability = 'readability';
     case Fallback = 'fallback';
+
+    /** PDF text + metadata extraction (the only path for PDF sources). */
+    case Pdf = 'pdf';
 }

@@ -184,4 +184,16 @@ final class StaticFetcherTest extends TestCase
         self::assertSame(FetchError::NotHtml, $outcome->error);
         self::assertSame('application/json', $outcome->contentType);
     }
+
+    public function testPdfContentTypeIsAccepted(): void
+    {
+        $fetcher = self::fetcher([
+            new Response(200, ['Content-Type' => 'application/pdf'], '%PDF-1.4 ...'),
+        ]);
+
+        $outcome = $fetcher->fetch('https://example.com/doc.pdf');
+
+        self::assertInstanceOf(FetchSuccess::class, $outcome);
+        self::assertSame('application/pdf', $outcome->contentType);
+    }
 }

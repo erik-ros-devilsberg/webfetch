@@ -1,0 +1,20 @@
+{
+    "synthetic-article": {
+        "file": "corpus/synthetic-article.pdf",
+        "url": "https://example.com/static-fetching-notes.pdf",
+        "rating": "usable",
+        "strategy": "pdf",
+        "min_words": 30,
+        "contains": "PDFCORPUSALPHA",
+        "title_contains": "Static Fetching"
+    },
+    "synthetic-memo": {
+        "file": "corpus/synthetic-memo.pdf",
+        "url": "https://example.com/engineering-memo.pdf",
+        "rating": "usable",
+        "strategy": "pdf",
+        "min_words": 25,
+        "contains": "PDFCORPUSBETA",
+        "title_contains": "Engineering Memo"
+    }
+}

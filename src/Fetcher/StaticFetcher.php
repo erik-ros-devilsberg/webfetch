@@ -85,10 +85,10 @@ final class StaticFetcher implements Fetcher
 
         $contentTypeHeader = $response->getHeaderLine('Content-Type');
         $contentType = strtolower(trim(explode(';', $contentTypeHeader)[0]));
-        if ($contentType !== '' && !self::isHtml($contentType)) {
+        if ($contentType !== '' && !self::isExtractable($contentType)) {
             return new FetchFailure(
                 FetchError::NotHtml,
-                "Content type '{$contentType}' is not HTML",
+                "Content type '{$contentType}' is not extractable",
                 httpStatus: $status,
                 contentType: $contentType,
             );
@@ -120,9 +120,17 @@ final class StaticFetcher implements Fetcher
         );
     }
 
-    private static function isHtml(string $contentType): bool
+    /**
+     * Content types we download and hand to an extractor. Everything else is
+     * rejected before the body is streamed, so we never pull megabytes of
+     * image/video/binary we can't read. The matching extractor is chosen
+     * downstream by DispatchingExtractor.
+     */
+    private static function isExtractable(string $contentType): bool
     {
-        return $contentType === 'text/html' || $contentType === 'application/xhtml+xml';
+        return $contentType === 'text/html'
+            || $contentType === 'application/xhtml+xml'
+            || $contentType === 'application/pdf';
     }
 
     private static function detectCharset(string $contentTypeHeader, string $body): string

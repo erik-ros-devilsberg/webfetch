@@ -6,6 +6,7 @@ namespace Devilsberg\Webfetch\Tests\Corpus;
 
 use Devilsberg\Webfetch\Extractor\ExtractSuccess;
 use Devilsberg\Webfetch\Extractor\HtmlExtractor;
+use Devilsberg\Webfetch\Extractor\PdfExtractor;
 use Devilsberg\Webfetch\Fetcher\FetchSuccess;
 use Devilsberg\Webfetch\Serializer\JsonSerializer;
 use Opis\JsonSchema\Validator;
@@ -20,6 +21,13 @@ use PHPUnit\Framework\TestCase;
 final class CorpusGateTest extends TestCase
 {
     private const float MIN_USABLE_SHARE = 0.80;
+
+    /**
+     * PDF text extraction is inherently lower-fidelity than HTML (no semantic
+     * structure, no OCR for scanned pages), so the PDF corpus carries its own
+     * usable-share bar rather than being held to the HTML gate.
+     */
+    private const float PDF_MIN_USABLE_SHARE = 0.80;
 
     /**
      * @return array<string, array{file: string, url: string, rating: string,
@@ -102,6 +110,90 @@ final class CorpusGateTest extends TestCase
             [],
             $regressions,
             "Corpus regressions detected:\n - " . implode("\n - ", $regressions),
+        );
+    }
+
+    /**
+     * @return array<string, array{file: string, url: string, rating: string,
+     *                             strategy: string, min_words: int,
+     *                             contains: string, title_contains: ?string}>
+     */
+    private static function pdfBaseline(): array
+    {
+        $json = file_get_contents(__DIR__ . '/../corpus/pdf-baseline.json');
+        self::assertNotFalse($json);
+        /** @var array<string, array{file: string, url: string, rating: string, strategy: string, min_words: int, contains: string, title_contains: ?string}> $decoded */
+        $decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+
+        return $decoded;
+    }
+
+    public function testPdfBaselineMeetsUsableShare(): void
+    {
+        $baseline = self::pdfBaseline();
+        $usable = count(array_filter($baseline, static fn (array $page): bool => $page['rating'] === 'usable'));
+
+        self::assertGreaterThanOrEqual(
+            self::PDF_MIN_USABLE_SHARE,
+            $usable / count($baseline),
+            'The committed PDF corpus baseline has dropped below its usable share — PDF extraction has regressed.',
+        );
+    }
+
+    public function testEveryPdfCorpusPageMeetsItsBaseline(): void
+    {
+        $extractor = new PdfExtractor();
+        $serializer = new JsonSerializer();
+        $validator = new Validator();
+        $schemaJson = file_get_contents(__DIR__ . '/../../schema/webfetch-success.schema.json');
+        self::assertNotFalse($schemaJson);
+        $schema = json_decode($schemaJson);
+        self::assertIsObject($schema);
+
+        $regressions = [];
+        foreach (self::pdfBaseline() as $name => $expect) {
+            $pdf = file_get_contents(__DIR__ . '/../' . $expect['file']);
+            if ($pdf === false) {
+                $regressions[] = "{$name}: corpus file {$expect['file']} is missing";
+                continue;
+            }
+
+            $outcome = $extractor->extract(new FetchSuccess($expect['url'], 200, 'application/pdf', 'binary', $pdf));
+            if (!$outcome instanceof ExtractSuccess) {
+                $regressions[] = "{$name}: extraction failed (baseline rating: {$expect['rating']})";
+                continue;
+            }
+
+            $content = $outcome->content;
+            $misses = [];
+            if ($content->strategy->value !== $expect['strategy']) {
+                $misses[] = "strategy {$content->strategy->value} (expected {$expect['strategy']})";
+            }
+            if ($content->wordCount < $expect['min_words']) {
+                $misses[] = "word count {$content->wordCount} (expected ≥{$expect['min_words']})";
+            }
+            if (!str_contains($content->contentMarkdown, $expect['contains'])) {
+                $misses[] = "content fingerprint '{$expect['contains']}' missing";
+            }
+            if ($expect['title_contains'] !== null
+                && !str_contains((string) $content->title, $expect['title_contains'])) {
+                $misses[] = "title '{$content->title}' lacks '{$expect['title_contains']}'";
+            }
+
+            $json = $serializer->success($content, $expect['url'], new \DateTimeImmutable('2026-06-10T12:00:00+00:00'));
+            if (!$validator->validate(json_decode($json), $schema)->isValid()) {
+                $misses[] = 'output violates the success schema';
+            }
+
+            if ($misses !== []) {
+                $regressions[] = "{$name}: " . implode('; ', $misses);
+            }
+        }
+
+        self::assertSame(
+            [],
+            $regressions,
+            "PDF corpus regressions detected:\n - " . implode("\n - ", $regressions),
         );
     }
 }

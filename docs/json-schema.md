@@ -12,7 +12,7 @@ Machine-readable schema: [`schema/webfetch-success.schema.json`](../schema/webfe
 | `schema_version` | `2` | Contract version. |
 | `url` | string | Final URL after redirects. |
 | `fetched_at` | string (RFC 3339) | When the page was fetched. |
-| `source_type` | `"html"` | Which source format the content was extracted from. More formats (e.g. `pdf`) join this as their extractors land. |
+| `source_type` | `"html"` \| `"pdf"` | Which source format the content was extracted from. |
 | `title` | string \| null | Page title (readability → og:title → `<title>`). |
 | `byline` | string \| null | Author via readability's detection, suppressed when it merely echoes site-wide `meta[name=author]` on a non-article page. Null when unknown — honest nulls over site chrome. |
 | `lang` | string \| null | `<html lang>` attribute. |
@@ -22,7 +22,7 @@ Machine-readable schema: [`schema/webfetch-success.schema.json`](../schema/webfe
 | `word_count` | integer | Words in the extracted text. |
 | `links` | array of `{text, href}` | Content links (readability path) or headline links (fallback path), absolute URLs, deduped, max 100. |
 | `meta` | object | `site_name`, `description`, `image`, `type` — each string \| null, from og:* tags. |
-| `extraction_strategy` | `"readability"` \| `"fallback"` | How content was obtained (see below). |
+| `extraction_strategy` | `"readability"` \| `"fallback"` \| `"pdf"` | How content was obtained (see below). |
 
 All fields are always present; missing data is `null` (or `[]` for links),
 never an absent key.
@@ -53,7 +53,7 @@ pipeline failures — it returns this shape instead.
 | `response_too_large` | Body exceeded the size cap (aborted mid-stream). |
 | `http_client_error` | HTTP 4xx. |
 | `http_server_error` | HTTP 5xx. |
-| `not_html` | Content type is not HTML — webfetch does not parse JSON/PDF/etc. |
+| `not_html` | Content type has no registered extractor (HTML and PDF are supported; JSON/images/etc. are not). |
 | `browser_unavailable` | ChromeFetcher only: chrome-php/chrome not installed or Chrome failed to start. |
 | `blocked_url` | SSRF guard (on by default): target is private/loopback/link-local, directly or via redirect. `FetchOptions(allowPrivateTargets: true)` disables. |
 | `robots_disallowed` | Only with the opt-in `RobotsAwareFetcher`: robots.txt disallows the path. |
@@ -74,3 +74,6 @@ SPA case — a headless-browser fetcher is the roadmap answer).
    links (anchor text ≥15 chars). If even that yields nothing, the result
    is an `empty_extraction` error instead (see story 06 — error schema
    lands with the error-contract sprint).
+3. **pdf** — the source was `application/pdf`; text and `title`/`byline`
+   metadata are extracted (in an isolated subprocess for safety). A
+   text-empty or scanned/image-only PDF yields `empty_extraction`.

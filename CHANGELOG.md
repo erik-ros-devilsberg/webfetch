@@ -23,6 +23,16 @@ major version, even if no PHP signature changed.
   `HtmlExtractor` as the `text/html` implementation and a `DispatchingExtractor`
   that selects the extractor by response content type. This is the seam new
   source formats plug into; an unsupported content type returns `not_html`.
+- **PDF support** (`application/pdf`): `PdfExtractor` reads text + `title`/
+  `byline` metadata into the same JSON contract (`source_type: "pdf"`,
+  `extraction_strategy: "pdf"`). Parsing runs in an isolated child process
+  with a hard memory cap and wall-clock timeout, so a malicious/malformed PDF
+  (decompression bomb, corrupted xref) cannot crash the never-throw facade;
+  scanned/image-only PDFs return `empty_extraction`. Adds the
+  `smalot/pdfparser` runtime dependency (pure PHP, no system binary;
+  LGPL-3.0 — webfetch stays MIT, the copyleft applies only to that
+  library's own files). `StaticFetcher` now admits `application/pdf`
+  through its content-type gate.
 
 ## [1.0.0] - 2026-06-10
 

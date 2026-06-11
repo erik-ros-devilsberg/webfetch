@@ -27,7 +27,7 @@
         "schema_version": { "const": 2 },
         "url": { "type": "string" },
         "fetched_at": { "type": "string", "format": "date-time" },
-        "source_type": { "enum": ["html"] },
+        "source_type": { "enum": ["html", "pdf"] },
         "title": { "type": ["string", "null"] },
         "byline": { "type": ["string", "null"] },
         "lang": { "type": ["string", "null"] },
@@ -58,6 +58,6 @@
                 "type": { "type": ["string", "null"] }
             }
         },
-        "extraction_strategy": { "enum": ["readability", "fallback"] }
+        "extraction_strategy": { "enum": ["readability", "fallback", "pdf"] }
     }
 }

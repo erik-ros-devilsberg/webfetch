@@ -31,6 +31,7 @@ final class DispatchingExtractor implements Extractor
             $extractors = [
                 'text/html' => $html,
                 'application/xhtml+xml' => $html,
+                'application/pdf' => new PdfExtractor(),
             ];
         }
 

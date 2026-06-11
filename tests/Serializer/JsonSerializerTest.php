@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Devilsberg\Webfetch\Tests\Serializer;
 
+use Devilsberg\Webfetch\Extractor\ExtractionStrategy;
 use Devilsberg\Webfetch\Extractor\ExtractSuccess;
 use Devilsberg\Webfetch\Extractor\HtmlExtractor;
+use Devilsberg\Webfetch\Extractor\PageContent;
+use Devilsberg\Webfetch\Extractor\PageMeta;
+use Devilsberg\Webfetch\Extractor\SourceType;
 use Devilsberg\Webfetch\Fetcher\FetchSuccess;
 use Devilsberg\Webfetch\Serializer\JsonSerializer;
 use Opis\JsonSchema\Validator;
@@ -87,6 +91,31 @@ final class JsonSerializerTest extends TestCase
         self::assertSame('https://example.com/page', $decoded['url']);
         self::assertSame(self::FETCHED_AT, $decoded['fetched_at']);
         self::assertSame('html', $decoded['source_type']);
+    }
+
+    public function testPdfSourceTypeSerializesAndValidates(): void
+    {
+        $content = new PageContent(
+            title: 'A PDF Report',
+            byline: 'Jane Author',
+            lang: null,
+            publishedAt: null,
+            excerpt: null,
+            contentMarkdown: 'The body text of the PDF.',
+            wordCount: 5,
+            links: [],
+            meta: new PageMeta(siteName: null, description: null, image: null, type: null),
+            strategy: ExtractionStrategy::Pdf,
+            sourceType: SourceType::Pdf,
+        );
+
+        $json = new JsonSerializer()->success($content, 'https://example.com/doc.pdf', new \DateTimeImmutable(self::FETCHED_AT));
+        self::assertMatchesSuccessSchema($json);
+
+        /** @var array<string, mixed> $decoded */
+        $decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        self::assertSame('pdf', $decoded['source_type']);
+        self::assertSame('pdf', $decoded['extraction_strategy']);
     }
 
     public function testJsonIsValidUnescapedUtf8(): void

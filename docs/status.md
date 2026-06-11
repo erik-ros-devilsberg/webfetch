@@ -19,4 +19,4 @@ Maintained by the agile plugin. One row per sprint — updated by `/agile:shape`
 | Examples Directory | examples-directory | done | Four runnable, lint-gated example scripts plus README link. |
 | Extraction Quality Fixes | extraction-quality-fixes | done | Clean code blocks, markdown tables, honest bylines — pinned by corpus. |
 | Extractor Dispatch Seam | extractor-dispatch-seam | done | Content-type-dispatched extractor interface plus source_type schema field. |
-| PDF Extractor | pdf-extractor | planned | Read application/pdf into readable JSON, process-isolated, corpus-scored. |
+| PDF Extractor | pdf-extractor | done | Read application/pdf into readable JSON, process-isolated, corpus-scored. |

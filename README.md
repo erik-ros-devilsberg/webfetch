@@ -17,6 +17,8 @@ Extraction reuses [fivefilters/readability.php](https://github.com/fivefilters/r
 parsing uses PHP 8.4's lexbor-based `\Dom\HTMLDocument`. Fetching is
 static-first; JavaScript-rendered pages are covered by the optional
 headless-Chrome fetcher (see [SPAs](#javascript-rendered-pages-spas)).
+`application/pdf` URLs work too — text and metadata come back in the same
+JSON shape, with `source_type: "pdf"` (see [PDFs](#pdfs)).
 
 ## Requirements
 
@@ -94,6 +96,28 @@ if (($result['error_code'] ?? null) === 'empty_extraction') {
 `networkIdle`), an extra render delay, and a profile directory. Without
 chrome-php installed it returns a `browser_unavailable` error JSON — it
 never throws.
+
+### PDFs
+
+A URL that serves `application/pdf` is extracted to the same JSON shape as a
+web page — text as `content_markdown`, plus `title`/`byline` from the PDF's
+metadata — tagged `source_type: "pdf"`. No extra setup: the
+`smalot/pdfparser` dependency is pulled in automatically, and no system
+binary is needed. Note that `smalot/pdfparser` is **LGPL-3.0** — your MIT
+code calling it stays MIT, but if you redistribute a bundle (committed
+`vendor/`, phar, Docker image) you carry its source and notices for those
+files; plain Composer installs and server-side use don't.
+
+```php
+$json = Webfetch::create()->fetch('https://example.com/report.pdf');
+// { "ok": true, "source_type": "pdf", "title": "...", "content_markdown": "...", ... }
+```
+
+Parsing runs in an isolated child process with a hard memory cap and a
+wall-clock timeout, so a malicious or malformed PDF (decompression bomb,
+corrupted structure) can never crash the caller — it comes back as an error
+JSON instead. Scanned or image-only PDFs (no embedded text) return an
+`empty_extraction` error; there is no OCR.
 
 ## Safety and etiquette
 

@@ -15,6 +15,9 @@ enum ExtractError: string
     /** No extractor registered for the response's content type. */
     case NotHtml = 'not_html';
 
+    /** Payload exceeded the extractor's size cap before parsing. */
+    case ResponseTooLarge = 'response_too_large';
+
     /** Pass-throughs from the parse stage so the pipeline keeps the cause. */
     case EmptyBody = 'empty_body';
     case ParseFailed = 'parse_failure';

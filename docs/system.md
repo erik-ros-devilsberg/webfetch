@@ -86,8 +86,9 @@ and quality gates.
   static fetcher's HTML gate emits — so non-HTML behaviour is unchanged.
   This keeps byte-interpretation out of the fetch layer: the fetcher only
   reports a content type, the dispatcher picks the matching extractor.
-  `HtmlExtractor` is the `text/html` implementation; document formats
-  (e.g. PDF) plug in behind the same seam with no fetch/serialize changes.
+  `HtmlExtractor` is the `text/html` implementation; `PdfExtractor` is the
+  `application/pdf` one (since PDF Extractor sprint), both behind the same
+  seam with no fetch/serialize changes.
 - `HtmlExtractor` (the `text/html` path):
   Primary path: fivefilters/readability.php (charThreshold 100,
   fixRelativeURLs against the final URL). Fallback triggers when content is
@@ -117,12 +118,56 @@ and quality gates.
   DateTimeImmutable)` → JSON string. Clock is a parameter — tests inject a
   fixed instant. Discriminator field `ok`; `schema_version` 2 (bumped from
   1 by the Extractor Dispatch Seam sprint). Success output carries
-  `source_type` (a `SourceType` enum on `PageContent`, currently always
-  `html`) so consumers can tell which source format produced the content;
+  `source_type` (a `SourceType` enum on `PageContent` — `html` or `pdf`)
+  so consumers can tell which source format produced the content;
   both schemas are `const: 2`.
 - Public contract: `schema/webfetch-success.schema.json` (draft-07),
   human docs in `docs/json-schema.md`. Tests validate every success output
   via opis/json-schema (dev dep). Schema changes are breaking.
+
+## PDF extraction (since PDF Extractor sprint)
+
+- `PdfExtractor` (`src/Extractor/`) handles `application/pdf` behind the
+  same `Extractor` seam: text → `content_markdown`, PDF Info dict
+  `Title`/`Author` → `title`/`byline` (null when absent — same honest-null
+  rule as HTML), `source_type` + `extraction_strategy` both `pdf`. Links,
+  lang, published_at, excerpt, og-meta are null/empty (PDFs have no
+  reliable equivalent). Text-empty / scanned / image-only PDFs →
+  `empty_extraction` (no OCR).
+- **Safety by isolation, not by trust.** Untrusted PDFs are parsed in a
+  short-lived child PHP process (`bin/pdf-worker.php`, outside the PSR-4
+  tree so it isn't linted/analysed as a class) launched via `proc_open`
+  with `PHP_BINARY`. The parent enforces a memory cap (`-d memory_limit`),
+  a wall-clock timeout (kill -9 at the deadline), and a pre-parse wire-size
+  cap. Rationale: smalot's failure modes on hostile input — decompression
+  bombs (uncatchable OOM fatal) and corrupted-xref infinite loops — would
+  otherwise breach the never-throw facade. The child dies; the parent
+  returns a typed `parse_failure` and lives. Where the subprocess can't run
+  (proc_open disabled, autoloader not found, worker missing) it degrades to
+  the same typed `parse_failure`, mirroring ChromeFetcher's
+  `browser_unavailable`.
+- Error mapping: hostile/killed/crashed/corrupt → `parse_failure`;
+  oversized wire payload → `response_too_large` (new `ExtractError` case);
+  parsed-but-no-text → `empty_extraction`.
+- **Dependency:** `smalot/pdfparser` is a hard runtime `require` (pure PHP,
+  no system binary — PDF works on a bare `composer install`). It is
+  **LGPL-3.0**: webfetch stays MIT (the copyleft binds only smalot's own
+  files); redistributing a bundle that contains it carries source+notices
+  for those files, plain Composer installs and server-side use don't.
+  A poppler/pdftotext backend (faster, better tables, but a system binary +
+  live CVEs) is a deliberately deferred option behind the same interface.
+- `StaticFetcher`'s content-type gate became `isExtractable` (html, xhtml,
+  pdf) — still rejects everything else as `not_html` *before* downloading
+  the body, so we never pull megabytes of unreadable binary.
+- Corpus: `tests/Corpus/CorpusGateTest.php` gained a parallel PDF loop over
+  `tests/corpus/pdf-baseline.json` with its own usable-share bar
+  (`PDF_MIN_USABLE_SHARE`, separate from HTML's because PDF fidelity is
+  inherently lower). Fixtures are **synthetic** PDFs built by
+  `tests/Support/MinimalPdf` (redistributable PDFs with clean known text are
+  hard to source offline; the gate's job is regression detection on our own
+  pipeline). `MinimalPdf` also builds the decompression bomb used to prove
+  isolation, via an incremental deflate context so the test process never
+  holds the inflated size.
 
 ## Public entry point and error contract (since Error JSON Contract sprint)
 

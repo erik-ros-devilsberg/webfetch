@@ -215,4 +215,22 @@ final class WebfetchTest extends TestCase
         self::assertSame('2026-06-10T12:00:00+00:00', $decoded['fetched_at']);
         self::assertSame('html', $decoded['source_type']);
     }
+
+    public function testPdfSuccessEndToEndThroughFacade(): void
+    {
+        $pdf = \Devilsberg\Webfetch\Tests\Support\MinimalPdf::withText(
+            'End to end ZQX98765 PDF body',
+            title: 'Facade PDF',
+        );
+        $json = self::webfetch([
+            new Response(200, ['Content-Type' => 'application/pdf'], $pdf),
+        ])->fetch('https://example.com/doc.pdf');
+
+        self::assertMatchesSchema($json, 'webfetch-success.schema.json');
+        /** @var array<string, mixed> $decoded */
+        $decoded = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+        self::assertTrue($decoded['ok']);
+        self::assertSame('pdf', $decoded['source_type']);
+        self::assertStringContainsString('ZQX98765', (string) $decoded['content_markdown']);
+    }
 }
